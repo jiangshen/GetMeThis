@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -27,6 +28,7 @@ public class FeedMeThisMain extends AppCompatActivity {
     public final static String MAP_FOOD = "com.example.jiangshen.feedmethis.MESSAGE";
 
     private static final int CODE_PICK = 1;
+    static final int REQUEST_IMAGE_CAPTURE = 1;
 
     ImageView imageView;
     TextView titleText;
@@ -69,7 +71,10 @@ public class FeedMeThisMain extends AppCompatActivity {
         fabCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                titleText.setText("HIHIHIHI");
+                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+                    startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+                }
             }
         });
 
@@ -90,6 +95,7 @@ public class FeedMeThisMain extends AppCompatActivity {
 
     @Override protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
+        //if source from media
         if (requestCode == CODE_PICK && resultCode == RESULT_OK) {
             // The user picked an image.
             Log.d("FeedMeThisMain", "User picked image: " + intent.getData());
@@ -101,6 +107,11 @@ public class FeedMeThisMain extends AppCompatActivity {
             } else {
                 titleText.setText("Unable to load, try again!");
             }
+        } else if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            //if source from camera
+            Bundle extras = intent.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            imageView.setImageBitmap(imageBitmap);
         }
     }
 
