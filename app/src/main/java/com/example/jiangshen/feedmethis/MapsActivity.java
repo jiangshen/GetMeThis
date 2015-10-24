@@ -12,6 +12,8 @@ import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -67,8 +69,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
 
         Toolbar mActionBar = (Toolbar) findViewById(R.id.toolbar);
-        mActionBar.setTitle("Hello");
+        mActionBar.setTitle("Find your treat");
         mActionBar.setTitleTextColor(Color.WHITE);
+
+        Window window = this.getWindow();
+
+// clear FLAG_TRANSLUCENT_STATUS flag:
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
+// add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+
+// finally change the color
+        window.setStatusBarColor(this.getResources().getColor(R.color.colorPrimary));
     }
 
     @Override
@@ -205,7 +218,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
        */
 
 /* hear you should be pass the you current location latitude and langitude, */
-        List<Place> findPlaces = service.findPlaces(m_Location.getLatitude(), m_Location.getLongitude(),"food", "pad+thai");
+        List<Place> findPlaces = service.findPlaces(m_Location.getLatitude(), m_Location.getLongitude(),"food", "burgers");
 
         m_Places = new String[findPlaces.size()];
         m_URL = new String[findPlaces.size()];

@@ -21,6 +21,9 @@
         android:glEsVersion="0x00020000"
         android:required="true"/>
 
+    <uses-sdk android:minSdkVersion="21"
+        android:targetSdkVersion="21"/>
+
 
     <permission
         android:name="com.example.jiangshen.feedmethis.permission.MAPS_RECEIVE"
