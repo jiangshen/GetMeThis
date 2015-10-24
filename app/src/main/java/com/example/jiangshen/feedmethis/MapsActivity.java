@@ -61,7 +61,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         m_Location = getLocation();
-        new GetPlaces(this).execute();
+        //new GetPlaces(this).execute();
         updateListView();
 
         ListView lv = (ListView) findViewById(R.id.listView);
@@ -100,7 +100,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         double latitude = location.getLatitude();
         double longitude = location.getLongitude();
         if (bPass) {
-            new GetPlaces(this).execute();
+            //new GetPlaces(this).execute();
             updateListView();
         }
 //        LatLng latLng = new LatLng(latitude, longitude);
@@ -127,11 +127,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
     public void updateListView() {
+        boolean bPass = (items.size() < 1);
         adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, items);
         adapter.notifyDataSetChanged();
 
         ListView oList = (ListView) findViewById(R.id.listView);
         oList.setAdapter(adapter);
+        if (bPass) {
+            new GetPlaces(this).execute();
+        }
+
     }
 
     public Location getLocation() {
