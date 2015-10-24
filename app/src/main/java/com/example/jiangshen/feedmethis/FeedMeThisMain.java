@@ -5,6 +5,7 @@ import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -40,6 +41,7 @@ public class FeedMeThisMain extends AppCompatActivity {
     String tagFinal;
 
     @Override
+    //init all methods here
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feed_me_this_main);
@@ -51,8 +53,7 @@ public class FeedMeThisMain extends AppCompatActivity {
         titleText = (TextView) findViewById(R.id.title_text);
         buttonMap = (Button) findViewById(R.id.button_map);     //button set invisible from XML
 
-        //setter
-
+        //setter and parser of callback functions
         //for now set arbitrary value
         tagFinal = "burrito";
 
@@ -78,7 +79,6 @@ public class FeedMeThisMain extends AppCompatActivity {
             }
         });
 
-
         buttonMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -87,11 +87,7 @@ public class FeedMeThisMain extends AppCompatActivity {
         });
     }
 
-    public void sendToMap(View view) {
-        Intent intent = new Intent(this, MapsActivity.class);
-        intent.putExtra(MAP_FOOD, tagFinal);
-        startActivity(intent);
-    }
+
 
     @Override protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
@@ -101,8 +97,9 @@ public class FeedMeThisMain extends AppCompatActivity {
             Log.d("FeedMeThisMain", "User picked image: " + intent.getData());
             Bitmap bitmap = loadBitmapFromUri(intent.getData());
             if (bitmap != null) {
-                imageView.setImageBitmap(bitmap);
-                titleText.setText(tagFinal);
+                imageView.setImageBitmap(analyzeForDisplay(bitmap));
+
+                //titleText.setText(tagFinal);
                 buttonMap.setVisibility(View.VISIBLE);
             } else {
                 titleText.setText("Unable to load, try again!");
@@ -111,7 +108,10 @@ public class FeedMeThisMain extends AppCompatActivity {
             //if source from camera
             Bundle extras = intent.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
-            imageView.setImageBitmap(imageBitmap);
+            imageView.setImageBitmap(analyzeForDisplay(imageBitmap));
+
+            //titleText.setText(tagFinal);
+            buttonMap.setVisibility(View.VISIBLE);
         }
     }
 
@@ -136,6 +136,29 @@ public class FeedMeThisMain extends AppCompatActivity {
             Log.e("FeedMeThisMain", "Error loading image: " + uri, e);
         }
         return null;
+    }
+
+    //if image is too large rotate the image back
+    private Bitmap analyzeForDisplay(Bitmap bmp) {
+        double ratio = (double) bmp.getHeight() / bmp.getWidth();
+        if (ratio < 0.6) {
+            return RotateBitmap(bmp, 90);
+        }
+        return bmp;
+    }
+
+    public static Bitmap RotateBitmap(Bitmap source, float angle)
+    {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(angle);
+        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(),
+                matrix, true);
+    }
+
+    public void sendToMap(View view) {
+        Intent intent = new Intent(this, MapsActivity.class);
+        intent.putExtra(MAP_FOOD, tagFinal);
+        startActivity(intent);
     }
 
     @Override
