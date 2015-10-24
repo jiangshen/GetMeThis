@@ -2,6 +2,7 @@ package com.example.jiangshen.feedmethis;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.location.Criteria;
 import android.location.Location;
@@ -40,10 +41,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private ArrayList<String> items;
     private ArrayList<Marker> markers;
 
+    private String foodName;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Get the message from the intent
+        Intent intent = getIntent();
+        this.foodName = intent.getStringExtra(FeedMeThisMain.MAP_FOOD);
+
         setContentView(R.layout.activity_maps);
         items = new ArrayList<String>();
         markers = new ArrayList<Marker>();
@@ -218,7 +226,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
        */
 
 /* hear you should be pass the you current location latitude and langitude, */
-        List<Place> findPlaces = service.findPlaces(m_Location.getLatitude(), m_Location.getLongitude(),"food", "burgers");
+        List<Place> findPlaces = service.findPlaces(m_Location.getLatitude(), m_Location.getLongitude(),"food", foodName);
 
         m_Places = new String[findPlaces.size()];
         m_URL = new String[findPlaces.size()];

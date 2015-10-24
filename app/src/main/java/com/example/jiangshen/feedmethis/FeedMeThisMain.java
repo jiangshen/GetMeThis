@@ -22,10 +22,14 @@ import static android.provider.MediaStore.Images.Media;
 
 public class FeedMeThisMain extends AppCompatActivity {
 
+    public final static String MAP_FOOD = "com.example.jiangshen.feedmethis.MESSAGE";
+
     private static final int CODE_PICK = 1;
     ImageView imageView;
     TextView titleText;
     Button buttonMap;
+
+    String tagFinal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +43,10 @@ public class FeedMeThisMain extends AppCompatActivity {
         titleText = (TextView) findViewById(R.id.title_text);
         buttonMap = (Button) findViewById(R.id.button_map);     //button set invisible from XML
 
+        //setter
+
+        //for now set arbitrary value
+        tagFinal = "burrito";
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -60,6 +68,7 @@ public class FeedMeThisMain extends AppCompatActivity {
 
     public void sendToMap(View view) {
         Intent intent = new Intent(this, MapsActivity.class);
+        intent.putExtra(MAP_FOOD, tagFinal);
         startActivity(intent);
     }
 
@@ -71,7 +80,7 @@ public class FeedMeThisMain extends AppCompatActivity {
             Bitmap bitmap = loadBitmapFromUri(intent.getData());
             if (bitmap != null) {
                 imageView.setImageBitmap(bitmap);
-                titleText.setText("<Clarifai tags here>");
+                titleText.setText(tagFinal);
                 buttonMap.setVisibility(View.VISIBLE);
             } else {
                 titleText.setText("Unable to load, try again!");
