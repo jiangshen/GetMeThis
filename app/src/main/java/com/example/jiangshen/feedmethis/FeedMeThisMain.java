@@ -1,8 +1,10 @@
 package com.example.jiangshen.feedmethis;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -25,9 +27,13 @@ public class FeedMeThisMain extends AppCompatActivity {
     public final static String MAP_FOOD = "com.example.jiangshen.feedmethis.MESSAGE";
 
     private static final int CODE_PICK = 1;
+
     ImageView imageView;
     TextView titleText;
     Button buttonMap;
+
+    FloatingActionButton fabImage;
+    FloatingActionButton fabCamera;
 
     String tagFinal;
 
@@ -48,8 +54,8 @@ public class FeedMeThisMain extends AppCompatActivity {
         //for now set arbitrary value
         tagFinal = "burrito";
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        fabImage = (FloatingActionButton) findViewById(R.id.fab_img);
+        fabImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //get a picture from album
@@ -57,6 +63,16 @@ public class FeedMeThisMain extends AppCompatActivity {
                 startActivityForResult(intent, CODE_PICK);
             }
         });
+
+        fabCamera = (FloatingActionButton) findViewById(R.id.fab_camera);
+        fabCamera.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#1DE9B6")));
+        fabCamera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                titleText.setText("HIHIHIHI");
+            }
+        });
+
 
         buttonMap.setOnClickListener(new View.OnClickListener() {
             @Override
