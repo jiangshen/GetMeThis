@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -24,6 +25,7 @@ public class FeedMeThisMain extends AppCompatActivity {
     private static final int CODE_PICK = 1;
     ImageView imageView;
     TextView titleText;
+    Button buttonMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,8 +34,11 @@ public class FeedMeThisMain extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        imageView = (ImageView) findViewById(R.id.imageView);
-        titleText = (TextView) findViewById(R.id.titleText);
+        //get the screen elements when loaded
+        imageView = (ImageView) findViewById(R.id.image_view);
+        titleText = (TextView) findViewById(R.id.title_text);
+        buttonMap = (Button) findViewById(R.id.button_map);     //button set invisible from XML
+
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -54,10 +59,10 @@ public class FeedMeThisMain extends AppCompatActivity {
             Bitmap bitmap = loadBitmapFromUri(intent.getData());
             if (bitmap != null) {
                 imageView.setImageBitmap(bitmap);
-                titleText.setText("Image Loaded.");
-                //selectButton.setEnabled(false);
+                titleText.setText("Image Loaded");
+                buttonMap.setVisibility(View.VISIBLE);
             } else {
-                titleText.setText("Unable to load selected image.");
+                titleText.setText("Unable to load, try again!");
             }
         }
     }
