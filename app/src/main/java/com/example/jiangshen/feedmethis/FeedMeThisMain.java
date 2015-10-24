@@ -1,15 +1,29 @@
 package com.example.jiangshen.feedmethis;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import java.io.IOException;
+
+import static android.provider.MediaStore.Images.Media;
 
 public class FeedMeThisMain extends AppCompatActivity {
+
+    private static final int CODE_PICK = 1;
+    ImageView imageView;
+    TextView titleText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,14 +32,57 @@ public class FeedMeThisMain extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        imageView = (ImageView) findViewById(R.id.imageView);
+        titleText = (TextView) findViewById(R.id.titleText);
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                //get a picture from album
+                final Intent intent = new Intent(Intent.ACTION_PICK, Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, CODE_PICK);
             }
         });
+    }
+
+    @Override protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+        if (requestCode == CODE_PICK && resultCode == RESULT_OK) {
+            // The user picked an image.
+            Log.d("FeedMeThisMain", "User picked image: " + intent.getData());
+            Bitmap bitmap = loadBitmapFromUri(intent.getData());
+            if (bitmap != null) {
+                imageView.setImageBitmap(bitmap);
+                titleText.setText("Image Loaded.");
+                //selectButton.setEnabled(false);
+            } else {
+                titleText.setText("Unable to load selected image.");
+            }
+        }
+    }
+
+    /** Loads a Bitmap from a content URI returned by the media picker. */
+    private Bitmap loadBitmapFromUri(Uri uri) {
+        try {
+            // The image may be large. Load an image that is sized for display. This follows best
+            // practices from http://developer.android.com/training/displaying-bitmaps/load-bitmap.html
+            BitmapFactory.Options opts = new BitmapFactory.Options();
+            opts.inJustDecodeBounds = true;
+            BitmapFactory.decodeStream(getContentResolver().openInputStream(uri), null, opts);
+            int sampleSize = 1;
+            while (opts.outWidth / (2 * sampleSize) >= imageView.getWidth() &&
+                    opts.outHeight / (2 * sampleSize) >= imageView.getHeight()) {
+                sampleSize *= 2;
+            }
+
+            opts = new BitmapFactory.Options();
+            opts.inSampleSize = sampleSize;
+            return BitmapFactory.decodeStream(getContentResolver().openInputStream(uri), null, opts);
+        } catch (IOException e) {
+            Log.e("FeedMeThisMain", "Error loading image: " + uri, e);
+        }
+        return null;
     }
 
     @Override
