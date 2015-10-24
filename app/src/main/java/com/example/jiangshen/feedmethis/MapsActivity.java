@@ -28,7 +28,9 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, LocationListener {
 
@@ -39,7 +41,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private Location m_Location;
     private ArrayAdapter<String> adapter;
     private ArrayList<String> items;
-    private ArrayList<Marker> markers;
+    //private ArrayList<Marker> markers;
+    private Map<String, Marker> markerMap;
 
     private String foodName;
 
@@ -54,7 +57,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         setContentView(R.layout.activity_maps);
         items = new ArrayList<String>();
-        markers = new ArrayList<Marker>();
+        //markers = new ArrayList<Marker>();
+        markerMap = new HashMap<>();
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -68,7 +72,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Marker m = markers.get(position);
+                Marker m = markerMap.get(items.get(position));
                 m.showInfoWindow();
                 LatLng markerPosition = m.getPosition();
 
@@ -191,7 +195,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             super.onPostExecute(result);
             bar.dismiss();
             items.clear();
-            markers.clear();
+            markerMap.clear();
+            //markers.clear();
             //this.listView.setAdapter(new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, m_Places));
             for (int i = 0; i < result.size(); i++) {
                 Marker m = m_Map.addMarker(new MarkerOptions()
@@ -200,7 +205,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                 //.icon(BitmapDescriptorFactory.fromResource(R.drawable.pin))
                         .snippet(result.get(i).getVicinity()));
                 items.add(m.getTitle() + ", " + m.getSnippet());
-                markers.add(m);
+                markerMap.put(m.getTitle() + ", " + m.getSnippet(), m);
+                //markers.add(m);
             }
             updateListView();
 
