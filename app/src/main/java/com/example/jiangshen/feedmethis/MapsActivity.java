@@ -95,9 +95,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onLocationChanged(Location location) {
 //        TextView locationTv = (TextView) findViewById(R.id.Text);
+        boolean bPass = (m_Location == null);
         m_Location = location;
         double latitude = location.getLatitude();
         double longitude = location.getLongitude();
+        if (bPass) {
+            new GetPlaces(this).execute();
+            updateListView();
+        }
 //        LatLng latLng = new LatLng(latitude, longitude);
         //m_Map.addMarker(new MarkerOptions().position(latLng));
 //        m_Map.moveCamera(CameraUpdateFactory.newLatLng(latLng));
@@ -226,22 +231,26 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
        */
 
 /* hear you should be pass the you current location latitude and langitude, */
-        List<Place> findPlaces = service.findPlaces(m_Location.getLatitude(), m_Location.getLongitude(),"food", foodName);
+        List<Place> findPlaces = new ArrayList<>();
+        if (null != m_Location) {
+            findPlaces = service.findPlaces(m_Location.getLatitude(), m_Location.getLongitude(),"food", foodName);
 
-        m_Places = new String[findPlaces.size()];
-        m_URL = new String[findPlaces.size()];
+            m_Places = new String[findPlaces.size()];
+            m_URL = new String[findPlaces.size()];
 
-        for (int i = 0; i < findPlaces.size(); i++) {
+            for (int i = 0; i < findPlaces.size(); i++) {
 
-            Place placeDetail = findPlaces.get(i);
-            placeDetail.getIcon();
+                Place placeDetail = findPlaces.get(i);
+                placeDetail.getIcon();
 
-            System.out.println(  placeDetail.getName());
-            m_Places[i] =placeDetail.getName();
+                System.out.println(  placeDetail.getName());
+                m_Places[i] =placeDetail.getName();
 
-            m_URL[i] =placeDetail.getIcon();
+                m_URL[i] =placeDetail.getIcon();
 
+            }
         }
+
 
         return (ArrayList<Place>)findPlaces;
 
