@@ -95,7 +95,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onLocationChanged(Location location) {
 //        TextView locationTv = (TextView) findViewById(R.id.Text);
-        boolean bPass = (m_Location == null);
+        boolean bPass = (items.size() == 0);
         m_Location = location;
         double latitude = location.getLatitude();
         double longitude = location.getLongitude();
