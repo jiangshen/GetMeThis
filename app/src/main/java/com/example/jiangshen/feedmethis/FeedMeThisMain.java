@@ -1,5 +1,7 @@
 package com.example.jiangshen.feedmethis;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
@@ -45,6 +47,8 @@ public class FeedMeThisMain extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feed_me_this_main);
+
+        //create menu
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -177,9 +181,16 @@ public class FeedMeThisMain extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            return true;
+            AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+            alertDialog.setTitle("About Feed Me This");
+            alertDialog.setMessage("Created at UGAHacks 2015 :)");
+            alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                   dialog.cancel();
+                }
+            });
+            alertDialog.show();
         }
-
         return super.onOptionsItemSelected(item);
     }
 }
