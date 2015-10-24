@@ -49,6 +49,18 @@ public class FeedMeThisMain extends AppCompatActivity {
                 startActivityForResult(intent, CODE_PICK);
             }
         });
+
+        buttonMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sendToMap(view);
+            }
+        });
+    }
+
+    public void sendToMap(View view) {
+        Intent intent = new Intent(this, MapsActivity.class);
+        startActivity(intent);
     }
 
     @Override protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
@@ -59,7 +71,7 @@ public class FeedMeThisMain extends AppCompatActivity {
             Bitmap bitmap = loadBitmapFromUri(intent.getData());
             if (bitmap != null) {
                 imageView.setImageBitmap(bitmap);
-                titleText.setText("Image Loaded");
+                titleText.setText("<Clarifai tags here>");
                 buttonMap.setVisibility(View.VISIBLE);
             } else {
                 titleText.setText("Unable to load, try again!");
