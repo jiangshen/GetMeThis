@@ -244,7 +244,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 /* hear you should be pass the you current location latitude and langitude, */
         List<Place> findPlaces = new ArrayList<>();
         if (null != m_Location) {
-            findPlaces = service.findPlaces(m_Location.getLatitude(), m_Location.getLongitude(),"food", foodName);
+            findPlaces = service.findPlaces(m_Location.getLatitude(), m_Location.getLongitude(), foodName);
 
             m_Places = new String[findPlaces.size()];
             m_URL = new String[findPlaces.size()];
