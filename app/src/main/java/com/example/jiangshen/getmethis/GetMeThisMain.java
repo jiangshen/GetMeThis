@@ -87,7 +87,6 @@ public class GetMeThisMain extends AppCompatActivity {
         buttonMap = (Button) findViewById(R.id.button_map);     //button set invisible from XML
 
         //setter and parser of callback functions
-
         fabImage = (FloatingActionButton) findViewById(R.id.fab_img);
         fabImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -125,7 +124,6 @@ public class GetMeThisMain extends AppCompatActivity {
 
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Are you looking for?")
-
             .setMultiChoiceItems(tagData, null, new DialogInterface.OnMultiChoiceClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which, boolean isChecked) {

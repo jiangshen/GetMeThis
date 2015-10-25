@@ -151,7 +151,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         m_LocationManager.requestLocationUpdates(bestProvider, 20000, 0, this);
 //        m_Map.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(location.getLatitude(), location.getLongitude())));
 //        m_Map.animateCamera(CameraUpdateFactory.zoomTo(14));
-
         return location;
     }
 
@@ -209,7 +208,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 //markers.add(m);
             }
             updateListView();
-
         }
 
         @Override
@@ -220,8 +218,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             bar.setIndeterminate(true);
             bar.setTitle("Loading...");
             bar.show();
-
-
         }
 
         @Override
@@ -236,12 +232,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public ArrayList<Place> findNearLocation()   {
 
         PlacesService service = new PlacesService("AIzaSyDWy1BBZPKzuXcEd_aD32Uqu4CipbbMcC0");
-
-       /*
-        Hear you should call the method find nearst place near to central park new delhi then we pass the lat and lang of central park. hear you can be pass you current location lat and lang.The third argument is used to set the specific place if you pass the atm the it will return the list of nearest atm list. if you want to get the every thing then you should be pass "" only
-       */
-
-/* hear you should be pass the you current location latitude and langitude, */
+        /*
+        Here you should call the method find nearest place near to central park new delhi
+        then we pass the lat and lang of central park. here you can pass your current location lat and long.
+        The third argument is used to set the specific place if you pass the atm the it will return the list of nearest atm list.
+        If you want to get the every thing then you should be pass "" only
+        */
+        /* here you should be pass the you current location latitude and longitude, */
         List<Place> findPlaces = new ArrayList<>();
         if (null != m_Location) {
             findPlaces = service.findPlaces(m_Location.getLatitude(), m_Location.getLongitude(), foodName);
@@ -254,16 +251,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 Place placeDetail = findPlaces.get(i);
                 placeDetail.getIcon();
 
-                System.out.println(  placeDetail.getName());
+                System.out.println(placeDetail.getName());
                 m_Places[i] =placeDetail.getName();
 
                 m_URL[i] =placeDetail.getIcon();
-
             }
         }
-
-
         return (ArrayList<Place>)findPlaces;
-
     }
 }

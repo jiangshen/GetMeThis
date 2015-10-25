@@ -23,9 +23,23 @@ public class PlacesService {
 
     private String API_KEY;
 
-    //types in google thing.
+    //Google Preferred Types
     private final ArrayList<String> types = new ArrayList<String>(Arrays.asList(new String[] {
-            "accouting", "airport", "amusement_park", "aquarium", "art_gallery", "atm", "bakery","bank", "bar", "beauty_salon", "bicycle_store","book_store","bowling_alley", "bus_station", "cafe campground", "car_dealer", "car_rental", "car_repair", "car_wash", "casino cemetery", "church", "city_hall", "clothing_store", "convenience_store", "courthouse", "dentist", "department_store", "doctor", "electrician", "electronics_store", "embassy", "establishment", "finance", "fire_station", "florist", "food", "funeral_home", "furniture_store", "gas_station", "general_contractor", "grocery_or_supermarket", "gym", "hair_care", "hardware_store", "health", "hindu_temple", "home_goods_store", "hospital", "insurance_agency", "jewelry_store", "laundry", "lawyer", "library", "liquor_store", "local_government_office", "locksmith","lodging", "meal_delivery","meal_takeaway","mosque","movie_rental","movie_theater","moving_company","museum","night_club","painter","park","parking","pet_store","pharmacy","physiotherapist","place_of_worship","plumber","police","post_office","real_estate_agency","restaurant","roofing_contractor","rv_park","school","shoe_store","shopping_mall","spa","stadium","storage","store","subway_station","synagogue","taxi_stand","train_station","travel_agency","university","veterinary_care","zoo",
+            "accounting", "airport", "amusement_park", "aquarium", "art_gallery", "atm", "bakery",
+            "bank", "bar", "beauty_salon", "bicycle_store","book_store","bowling_alley", "bus_station",
+            "cafe campground", "car_dealer", "car_rental", "car_repair", "car_wash", "casino cemetery",
+            "church", "city_hall", "clothing_store", "convenience_store", "courthouse", "dentist",
+            "department_store", "doctor", "electrician", "electronics_store", "embassy", "establishment",
+            "finance", "fire_station", "florist", "food", "funeral_home", "furniture_store", "gas_station",
+            "general_contractor", "grocery_or_supermarket", "gym", "hair_care", "hardware_store", "health",
+            "hindu_temple", "home_goods_store", "hospital", "insurance_agency", "jewelry_store", "laundry",
+            "lawyer", "library", "liquor_store", "local_government_office", "locksmith","lodging",
+            "meal_delivery","meal_takeaway","mosque","movie_rental","movie_theater","moving_company",
+            "museum", "night_club", "painter", "park", "parking", "pet_store", "pharmacy", "physiotherapist",
+            "place_of_worship","plumber","police","post_office","real_estate_agency","restaurant",
+            "roofing_contractor","rv_park","school","shoe_store","shopping_mall","spa","stadium",
+            "storage", "store", "subway_station", "synagogue", "taxi_stand", "train_station", "travel_agency",
+            "university", "veterinary_care", "zoo",
     }));
 
     public PlacesService(String apikey) {
@@ -38,9 +52,7 @@ public class PlacesService {
 
     public List<Place> findPlaces(double latitude, double longitude, String keyword)
     {
-
         String urlString = makeUrl(latitude, longitude, keyword);
-
 
         try {
             String json = getJSON(urlString);
@@ -49,17 +61,15 @@ public class PlacesService {
             JSONObject object = new JSONObject(json);
             JSONArray array = object.getJSONArray("results");
 
-
             ArrayList<Place> arrayList = new ArrayList<Place>();
             for (int i = 0; i < array.length(); i++) {
                 try {
                     Place place = Place.jsonToPontoReferencia((JSONObject) array.get(i));
-
                     Log.v("Places Services ", "" + place);
-
 
                     arrayList.add(place);
                 } catch (Exception e) {
+                    Log.d("PlacesService", e.getMessage());
                 }
             }
             return arrayList;
@@ -68,6 +78,7 @@ public class PlacesService {
         }
         return null;
     }
+
     //https://maps.googleapis.com/maps/api/place/search/json?location=28.632808,77.218276&radius=500&types=atm&sensor=false&key=<key>
     private String makeUrl(double latitude, double longitude, String keyword) {
         String[] words = keyword.split(", ");
@@ -109,7 +120,6 @@ public class PlacesService {
 //            urlString.append("&sensor=false&key=" + API_KEY);
 //        }
 
-
         return urlString.toString();
         //return "https://maps.googleapis.com/maps/api/place/radarsearch/json?location=48.859294,2.347589&radius=5000&key=AIzaSyDWy1BBZPKzuXcEd_aD32Uqu4CipbbMcC0 ";
         //return "https://maps.googleapis.com/maps/api/place/search/json?location=-33.8670522,151.1957362&radius=500&sensor=true&key=AIzaSyDWy1BBZPKzuXcEd_aD32Uqu4CipbbMcC0";
@@ -132,17 +142,13 @@ public class PlacesService {
             {
                 content.append(line + "\n");
             }
-
             bufferedReader.close();
         }
 
         catch (Exception e)
         {
-
             e.printStackTrace();
-
         }
-
         return content.toString();
     }
 }
