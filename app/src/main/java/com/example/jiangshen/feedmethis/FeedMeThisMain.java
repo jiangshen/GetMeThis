@@ -1,6 +1,7 @@
 package com.example.jiangshen.feedmethis;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
@@ -30,7 +31,6 @@ import java.util.Arrays;
 
 import static android.provider.MediaStore.Images.Media;
 
-
 import com.clarifai.api.ClarifaiClient;
 import com.clarifai.api.RecognitionRequest;
 import com.clarifai.api.RecognitionResult;
@@ -47,15 +47,17 @@ public class FeedMeThisMain extends AppCompatActivity {
             "people",
             "adult",
             "empty",
-            "blank"})
+            "blank",
+            "background"})
     );
+
+    private ArrayList<String> masterTags = new ArrayList<>();
 
     // IMPORTANT NOTE: you should replace these keys with your own App ID and secret.
     // These can be obtained at https://developer.clarifai.com/applications
     private static final String APP_ID = "vM05qo55uhZard2dL4BixmMm4WsHIl6CsGCTgS_7";
     private static final String APP_SECRET = "rx4oPPiXiCWNRVcoJ0huLz02cKiQUZtq5JPVrhjM";
     private final ClarifaiClient client = new ClarifaiClient(APP_ID, APP_SECRET);
-
 
     public final static String MAP_FOOD = "com.example.jiangshen.feedmethis.MESSAGE";
 
@@ -69,7 +71,8 @@ public class FeedMeThisMain extends AppCompatActivity {
     FloatingActionButton fabImage;
     FloatingActionButton fabCamera;
 
-    String tagFinal;
+    String selectedTags = "";
+    boolean selectionComplete = false;
 
     @Override
     //init all methods here
@@ -87,8 +90,6 @@ public class FeedMeThisMain extends AppCompatActivity {
         buttonMap = (Button) findViewById(R.id.button_map);     //button set invisible from XML
 
         //setter and parser of callback functions
-        //for now set arbitrary value
-        tagFinal = "burrito";
 
         fabImage = (FloatingActionButton) findViewById(R.id.fab_img);
         fabImage.setOnClickListener(new View.OnClickListener() {
@@ -115,12 +116,68 @@ public class FeedMeThisMain extends AppCompatActivity {
         buttonMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                sendToMap(view);
+                selectedTags = "";
+                selectionComplete = false;
+                showCheckBoxDialog(masterTags.toArray(new CharSequence[masterTags.size()]));
+                if (selectedTags.equals("") && selectionComplete) {
+                    titleText.setText("NOOOOO");
+                } else if (selectionComplete) {
+                    titleText.setText(selectedTags);
+                }
             }
         });
     }
 
+    private void showCheckBoxDialog(final CharSequence[] tagData) {
+        // where we will store or remove selected items
+        final ArrayList<Integer> selectedItemsIndexList;
+        selectedItemsIndexList = new ArrayList<Integer>();
 
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Are you looking for?")
+
+            .setMultiChoiceItems(tagData, null, new DialogInterface.OnMultiChoiceClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                    if (isChecked) {
+                        // if the user checked the item, add it to the selected items
+                        selectedItemsIndexList.add(which);
+                    } else if (selectedItemsIndexList.contains(which)) {
+                        // else if the item is already in the array, remove it
+                        selectedItemsIndexList.remove(Integer.valueOf(which));
+                    }
+                    // you can also add other codes here,
+                    // for example a tool tip that gives user an idea of what he is selecting
+                    // showToast("Just an example description.");
+                }
+            })
+            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int id) {
+                    // user clicked OK, so save the mSelectedItems results somewhere
+                    // here we are trying to retrieve the selected items indices
+                    String selectedTokens = "";
+                    if (!selectedItemsIndexList.isEmpty()) {
+                        for (Integer i : selectedItemsIndexList) {
+                            selectedTokens += tagData[i] + ", ";
+                        }
+                        setSelectedTags(selectedTokens.substring(0, selectedTokens.length() - 2));
+                        sendToMap(((Dialog) dialog).getCurrentFocus(), selectedTags);
+                        //titleText.setText(selectedTokens.substring(0, selectedTokens.length() - 2));
+                        //selectedTags = "";
+                    }
+                    selectionComplete = true;
+                }
+            })
+            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int id) {
+                    // removes the AlertDialog in the screen
+                    selectionComplete = true;
+                }
+            })
+            .show();
+    }
 
     @Override protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
@@ -135,8 +192,6 @@ public class FeedMeThisMain extends AppCompatActivity {
                 bitmap = loadBitmapFromUri(intent.getData());
                 if (bitmap != null) {
                     imageView.setImageBitmap(analyzeForDisplay(bitmap));
-
-                    //titleText.setText(tagFinal);
                     buttonMap.setVisibility(View.VISIBLE);
                 } else {
                     titleText.setText("Unable to load, try again!");
@@ -147,10 +202,8 @@ public class FeedMeThisMain extends AppCompatActivity {
                 bitmap = (Bitmap) extras.get("data");
                 imageView.setImageBitmap(analyzeForDisplay(bitmap));
 
-                //titleText.setText(tagFinal);
                 buttonMap.setVisibility(View.VISIBLE);
             }
-
             clarifaiAnalyze(bitmap);
         }
     }
@@ -159,7 +212,7 @@ public class FeedMeThisMain extends AppCompatActivity {
         //clarifai send
         if (bitmap != null) {
             imageView.setImageBitmap(bitmap);
-            titleText.setText("Recognizing...");
+            titleText.setText("Analyzing visuals...");
             buttonMap.setEnabled(false);
 
             // Run recognition on a background thread since it makes a network call.
@@ -216,9 +269,9 @@ public class FeedMeThisMain extends AppCompatActivity {
                 matrix, true);
     }
 
-    public void sendToMap(View view) {
+    public void sendToMap(View view, String str) {
         Intent intent = new Intent(this, MapsActivity.class);
-        intent.putExtra(MAP_FOOD, tagFinal);
+        intent.putExtra(MAP_FOOD, str);
         startActivity(intent);
     }
 
@@ -247,15 +300,18 @@ public class FeedMeThisMain extends AppCompatActivity {
     private void updateUIForResult(RecognitionResult result) {
         if (result != null) {
             if (result.getStatusCode() == RecognitionResult.StatusCode.OK) {
+                masterTags.clear();
                 // Display the list of tags in the UI.
-                StringBuilder b = new StringBuilder();
+                //StringBuilder b = new StringBuilder();
                 for (Tag tag : result.getTags()) {
                     //b.append(b.length() > 0 ? ", " : "").append(tag.getName() + "." + String.format("%.2f", tag.getProbability()));
-                    if (tag.getProbability() >= 0.8 && !exclude.contains(tag.getName())) {
-                        b.append(b.length() > 0 ? ", " : "").append(tag.getName());
+                    if (tag.getProbability() >= 0.85 && !exclude.contains(tag.getName())) {
+                        //add all entries into masterTags
+                        masterTags.add(tag.getName());
+                        //b.append(b.length() > 0 ? ", " : "").append(tag.getName());
                     }
                 }
-                titleText.setText(b.toString());
+                titleText.setText("Analysis Complete!");
             } else {
                 Log.e(TAG, "Clarifai: " + result.getStatusMessage());
                 titleText.setText("Sorry, there was an error recognizing your image.");
@@ -284,7 +340,7 @@ public class FeedMeThisMain extends AppCompatActivity {
         if (id == R.id.action_settings) {
             AlertDialog alertDialog = new AlertDialog.Builder(this).create();
             alertDialog.setTitle("About Get Me This");
-            alertDialog.setMessage("Created at UGAHacks 2015 :)");
+            alertDialog.setMessage(String.format("Created at UGAHacks 2015\n\nWe hope our app will help you discover a new way of searching. Unleash your creativity, go out and take pictures! And see what surprises you can get :)"));
             alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                    dialog.cancel();
@@ -293,5 +349,9 @@ public class FeedMeThisMain extends AppCompatActivity {
             alertDialog.show();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void setSelectedTags(String str) {
+        this.selectedTags = str;
     }
 }
