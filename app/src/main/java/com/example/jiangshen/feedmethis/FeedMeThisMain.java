@@ -71,9 +71,6 @@ public class FeedMeThisMain extends AppCompatActivity {
     FloatingActionButton fabImage;
     FloatingActionButton fabCamera;
 
-    String selectedTags = "";
-    boolean selectionComplete = false;
-
     @Override
     //init all methods here
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,14 +113,7 @@ public class FeedMeThisMain extends AppCompatActivity {
         buttonMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                selectedTags = "";
-                selectionComplete = false;
                 showCheckBoxDialog(masterTags.toArray(new CharSequence[masterTags.size()]));
-                if (selectedTags.equals("") && selectionComplete) {
-                    titleText.setText("NOOOOO");
-                } else if (selectionComplete) {
-                    titleText.setText(selectedTags);
-                }
             }
         });
     }
@@ -161,19 +151,16 @@ public class FeedMeThisMain extends AppCompatActivity {
                         for (Integer i : selectedItemsIndexList) {
                             selectedTokens += tagData[i] + ", ";
                         }
-                        setSelectedTags(selectedTokens.substring(0, selectedTokens.length() - 2));
-                        sendToMap(((Dialog) dialog).getCurrentFocus(), selectedTags);
+                        //send the final info to maps
+                        sendToMap(((Dialog) dialog).getCurrentFocus(), selectedTokens.substring(0, selectedTokens.length() - 2));
                         //titleText.setText(selectedTokens.substring(0, selectedTokens.length() - 2));
-                        //selectedTags = "";
                     }
-                    selectionComplete = true;
                 }
             })
             .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int id) {
                     // removes the AlertDialog in the screen
-                    selectionComplete = true;
                 }
             })
             .show();
@@ -349,9 +336,5 @@ public class FeedMeThisMain extends AppCompatActivity {
             alertDialog.show();
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    public void setSelectedTags(String str) {
-        this.selectedTags = str;
     }
 }
