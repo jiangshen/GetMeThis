@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.jiangshen.feedmethis" >
+    package="com.example.jiangshen.getmethis" >
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -26,7 +26,7 @@
 
 
     <permission
-        android:name="com.example.jiangshen.feedmethis.permission.MAPS_RECEIVE"
+        android:name="com.example.jiangshen.getmethis.permission.MAPS_RECEIVE"
         android:protectionLevel="signature"/>
 
     <application
@@ -37,7 +37,7 @@
         android:theme="@style/AppTheme" >
 
         <activity
-            android:name=".FeedMeThisMain"
+            android:name="com.example.jiangshen.getmethis.GetMeThisMain"
             android:label="Get Me This"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" >
@@ -62,13 +62,13 @@
         <!--lg phones cant use apptheme.appbaroverlay-->
 
         <activity
-            android:name=".MapsActivity"
+            android:name="com.example.jiangshen.getmethis.MapsActivity"
             android:label="Get Directions"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.jiangshen.feedmethis.FeedMeThisMain" />
+                android:value="com.example.jiangshen.getmethis.GetMeThisMain" />
         </activity>
     </application>
 

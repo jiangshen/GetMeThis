@@ -1,4 +1,4 @@
-package com.example.jiangshen.feedmethis;
+package com.example.jiangshen.getmethis;
 
 /**
  * Created by Jesse on 10/24/2015.

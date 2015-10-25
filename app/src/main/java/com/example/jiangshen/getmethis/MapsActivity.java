@@ -1,4 +1,4 @@
-package com.example.jiangshen.feedmethis;
+package com.example.jiangshen.getmethis;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -53,7 +53,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         // Get the message from the intent
         Intent intent = getIntent();
-        this.foodName = intent.getStringExtra(FeedMeThisMain.MAP_FOOD);
+        this.foodName = intent.getStringExtra(GetMeThisMain.MAP_FOOD);
 
         setContentView(R.layout.activity_maps);
         items = new ArrayList<String>();

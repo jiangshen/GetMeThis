@@ -1,4 +1,4 @@
-package com.example.jiangshen.feedmethis;
+package com.example.jiangshen.getmethis;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -37,10 +37,10 @@ import com.clarifai.api.RecognitionResult;
 import com.clarifai.api.Tag;
 import com.clarifai.api.exception.ClarifaiException;
 
-public class FeedMeThisMain extends AppCompatActivity {
+public class GetMeThisMain extends AppCompatActivity {
 
     //clarifai vars
-    private static final String TAG = FeedMeThisMain.class.getSimpleName();
+    private static final String TAG = GetMeThisMain.class.getSimpleName();
     private static final ArrayList<String> exclude = new ArrayList<String>(Arrays.asList(new String[]{
             "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten",
             "nobody",
@@ -175,7 +175,7 @@ public class FeedMeThisMain extends AppCompatActivity {
             //if source from media
             if (requestCode == CODE_PICK) {
                 // The user picked an image.
-                Log.d("FeedMeThisMain", "User picked image: " + intent.getData());
+                Log.d("GetMeThisMain", "User picked image: " + intent.getData());
                 bitmap = loadBitmapFromUri(intent.getData());
                 if (bitmap != null) {
                     imageView.setImageBitmap(analyzeForDisplay(bitmap));
@@ -234,7 +234,7 @@ public class FeedMeThisMain extends AppCompatActivity {
             opts.inSampleSize = sampleSize;
             return BitmapFactory.decodeStream(getContentResolver().openInputStream(uri), null, opts);
         } catch (IOException e) {
-            Log.e("FeedMeThisMain", "Error loading image: " + uri, e);
+            Log.e("GetMeThisMain", "Error loading image: " + uri, e);
         }
         return null;
     }
