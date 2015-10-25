@@ -25,6 +25,8 @@ import android.widget.TextView;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import static android.provider.MediaStore.Images.Media;
 
@@ -39,6 +41,14 @@ public class FeedMeThisMain extends AppCompatActivity {
 
     //clarifai vars
     private static final String TAG = FeedMeThisMain.class.getSimpleName();
+    private static final ArrayList<String> exclude = new ArrayList<String>(Arrays.asList(new String[]{
+            "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten",
+            "nobody",
+            "people",
+            "adult",
+            "empty",
+            "blank"})
+    );
 
     // IMPORTANT NOTE: you should replace these keys with your own App ID and secret.
     // These can be obtained at https://developer.clarifai.com/applications
@@ -240,7 +250,10 @@ public class FeedMeThisMain extends AppCompatActivity {
                 // Display the list of tags in the UI.
                 StringBuilder b = new StringBuilder();
                 for (Tag tag : result.getTags()) {
-                    b.append(b.length() > 0 ? ", " : "").append(tag.getName());
+                    //b.append(b.length() > 0 ? ", " : "").append(tag.getName() + "." + String.format("%.2f", tag.getProbability()));
+                    if (tag.getProbability() >= 0.8 && !exclude.contains(tag.getName())) {
+                        b.append(b.length() > 0 ? ", " : "").append(tag.getName());
+                    }
                 }
                 titleText.setText(b.toString());
             } else {
