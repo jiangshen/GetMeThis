@@ -38,7 +38,7 @@
 
         <activity
             android:name=".FeedMeThisMain"
-            android:label="Feed Me This"
+            android:label="Get Me This"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" >
             <intent-filter>

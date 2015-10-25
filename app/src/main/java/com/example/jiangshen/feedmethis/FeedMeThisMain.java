@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
@@ -22,11 +23,29 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 import static android.provider.MediaStore.Images.Media;
 
+
+import com.clarifai.api.ClarifaiClient;
+import com.clarifai.api.RecognitionRequest;
+import com.clarifai.api.RecognitionResult;
+import com.clarifai.api.Tag;
+import com.clarifai.api.exception.ClarifaiException;
+
 public class FeedMeThisMain extends AppCompatActivity {
+
+    //clarifai vars
+    private static final String TAG = FeedMeThisMain.class.getSimpleName();
+
+    // IMPORTANT NOTE: you should replace these keys with your own App ID and secret.
+    // These can be obtained at https://developer.clarifai.com/applications
+    private static final String APP_ID = "vM05qo55uhZard2dL4BixmMm4WsHIl6CsGCTgS_7";
+    private static final String APP_SECRET = "rx4oPPiXiCWNRVcoJ0huLz02cKiQUZtq5JPVrhjM";
+    private final ClarifaiClient client = new ClarifaiClient(APP_ID, APP_SECRET);
+
 
     public final static String MAP_FOOD = "com.example.jiangshen.feedmethis.MESSAGE";
 
@@ -95,27 +114,55 @@ public class FeedMeThisMain extends AppCompatActivity {
 
     @Override protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
-        //if source from media
-        if (requestCode == CODE_PICK && resultCode == RESULT_OK) {
-            // The user picked an image.
-            Log.d("FeedMeThisMain", "User picked image: " + intent.getData());
-            Bitmap bitmap = loadBitmapFromUri(intent.getData());
-            if (bitmap != null) {
+
+        Bitmap bitmap = null;
+
+        if (resultCode == RESULT_OK) {
+            //if source from media
+            if (requestCode == CODE_PICK) {
+                // The user picked an image.
+                Log.d("FeedMeThisMain", "User picked image: " + intent.getData());
+                bitmap = loadBitmapFromUri(intent.getData());
+                if (bitmap != null) {
+                    imageView.setImageBitmap(analyzeForDisplay(bitmap));
+
+                    //titleText.setText(tagFinal);
+                    buttonMap.setVisibility(View.VISIBLE);
+                } else {
+                    titleText.setText("Unable to load, try again!");
+                }
+            } else if (requestCode == REQUEST_IMAGE_CAPTURE) {
+                //if source from camera
+                Bundle extras = intent.getExtras();
+                bitmap = (Bitmap) extras.get("data");
                 imageView.setImageBitmap(analyzeForDisplay(bitmap));
 
                 //titleText.setText(tagFinal);
                 buttonMap.setVisibility(View.VISIBLE);
-            } else {
-                titleText.setText("Unable to load, try again!");
             }
-        } else if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            //if source from camera
-            Bundle extras = intent.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
-            imageView.setImageBitmap(analyzeForDisplay(imageBitmap));
 
-            //titleText.setText(tagFinal);
-            buttonMap.setVisibility(View.VISIBLE);
+            clarifaiAnalyze(bitmap);
+        }
+    }
+
+    private void clarifaiAnalyze(Bitmap bitmap) {
+        //clarifai send
+        if (bitmap != null) {
+            imageView.setImageBitmap(bitmap);
+            titleText.setText("Recognizing...");
+            buttonMap.setEnabled(false);
+
+            // Run recognition on a background thread since it makes a network call.
+            new AsyncTask<Bitmap, Void, RecognitionResult>() {
+                @Override protected RecognitionResult doInBackground(Bitmap... bitmaps) {
+                    return recognizeBitmap(bitmaps[0]);
+                }
+                @Override protected void onPostExecute(RecognitionResult result) {
+                    updateUIForResult(result);
+                }
+            }.execute(bitmap);
+        } else {
+            titleText.setText("Unable to load selected image.");
         }
     }
 
@@ -165,6 +212,47 @@ public class FeedMeThisMain extends AppCompatActivity {
         startActivity(intent);
     }
 
+    /** Sends the given bitmap to Clarifai for recognition and returns the result. */
+    private RecognitionResult recognizeBitmap(Bitmap bitmap) {
+        try {
+            // Scale down the image. This step is optional. However, sending large images over the
+            // network is slow and  does not significantly improve recognition performance.
+            Bitmap scaled = Bitmap.createScaledBitmap(bitmap, 320,
+                    320 * bitmap.getHeight() / bitmap.getWidth(), true);
+
+            // Compress the image as a JPEG.
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            scaled.compress(Bitmap.CompressFormat.JPEG, 90, out);
+            byte[] jpeg = out.toByteArray();
+
+            // Send the JPEG to Clarifai and return the result.
+            return client.recognize(new RecognitionRequest(jpeg)).get(0);
+        } catch (ClarifaiException e) {
+            Log.e(TAG, "Clarifai error", e);
+            return null;
+        }
+    }
+
+    /** Updates the UI by displaying tags for the given result. */
+    private void updateUIForResult(RecognitionResult result) {
+        if (result != null) {
+            if (result.getStatusCode() == RecognitionResult.StatusCode.OK) {
+                // Display the list of tags in the UI.
+                StringBuilder b = new StringBuilder();
+                for (Tag tag : result.getTags()) {
+                    b.append(b.length() > 0 ? ", " : "").append(tag.getName());
+                }
+                titleText.setText(b.toString());
+            } else {
+                Log.e(TAG, "Clarifai: " + result.getStatusMessage());
+                titleText.setText("Sorry, there was an error recognizing your image.");
+            }
+        } else {
+            titleText.setText("Sorry, there was an error recognizing your image.");
+        }
+        buttonMap.setEnabled(true);
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -182,7 +270,7 @@ public class FeedMeThisMain extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             AlertDialog alertDialog = new AlertDialog.Builder(this).create();
-            alertDialog.setTitle("About Feed Me This");
+            alertDialog.setTitle("About Get Me This");
             alertDialog.setMessage("Created at UGAHacks 2015 :)");
             alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
