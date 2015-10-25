@@ -1,4 +1,2 @@
-# FeedMeThis
-Recognize your food from image and tells you where to get it!
-
-THERES NO MORE DESCRIPTION HERE!!!! :<
+# Get Me This
+Next generation image recognition app searches for what you want based on your photos!
