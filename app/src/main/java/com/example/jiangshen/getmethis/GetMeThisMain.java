@@ -98,7 +98,7 @@ public class GetMeThisMain extends AppCompatActivity {
         });
 
         fabCamera = (FloatingActionButton) findViewById(R.id.fab_camera);
-        fabCamera.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#1DE9B6")));
+        fabCamera.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#70c209")));
         fabCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
