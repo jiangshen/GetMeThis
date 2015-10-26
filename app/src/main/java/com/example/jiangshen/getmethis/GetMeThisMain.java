@@ -75,7 +75,7 @@ public class GetMeThisMain extends AppCompatActivity {
     //init all methods here
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_feed_me_this_main);
+        setContentView(R.layout.activity_get_me_this_main);
 
         //create menu
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -310,7 +310,7 @@ public class GetMeThisMain extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_feed_me_this_main, menu);
+        getMenuInflater().inflate(R.menu.menu_get_me_this_main, menu);
         return true;
     }
 
