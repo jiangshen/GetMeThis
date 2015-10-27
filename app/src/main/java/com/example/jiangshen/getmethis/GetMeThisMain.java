@@ -2,6 +2,7 @@ package com.example.jiangshen.getmethis;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
@@ -200,26 +201,45 @@ public class GetMeThisMain extends AppCompatActivity {
         }
     }
 
-    private void clarifaiAnalyze(Bitmap bitmap) {
-        //clarifai send
-        if (bitmap != null) {
-            imageView.setImageBitmap(bitmap);
-            //do the loading dialog
-            //titleText.setText("Analyzing visuals...");
-            buttonMap.setEnabled(false);
+    private void clarifaiAnalyze(final Bitmap bitmap) {
+        final ProgressDialog progress = ProgressDialog.show(GetMeThisMain.this, "", "Analyzing image");
+        new Thread()
+        {
+            public void run()
+            {
+                try{
+                    GetMeThisMain.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            progress.show();
+                            //clarifai send
+                            if (bitmap != null) {
+                                imageView.setImageBitmap(bitmap);
+                                //do the loading dialog
+                                //titleText.setText("Analyzing visuals...");
+                                buttonMap.setEnabled(false);
 
-            // Run recognition on a background thread since it makes a network call.
-            new AsyncTask<Bitmap, Void, RecognitionResult>() {
-                @Override protected RecognitionResult doInBackground(Bitmap... bitmaps) {
-                    return recognizeBitmap(bitmaps[0]);
+                                // Run recognition on a background thread since it makes a network call.
+                                new AsyncTask<Bitmap, Void, RecognitionResult>() {
+                                    @Override protected RecognitionResult doInBackground(Bitmap... bitmaps) {
+                                        return recognizeBitmap(bitmaps[0]);
+                                    }
+                                    @Override protected void onPostExecute(RecognitionResult result) {
+                                        updateUIForResult(result);
+                                    }
+                                }.execute(bitmap);
+                            } else {
+                                //titleText.setText("Unable to load selected image.");
+                            }
+                        }
+                    });
                 }
-                @Override protected void onPostExecute(RecognitionResult result) {
-                    updateUIForResult(result);
+                catch(Exception e)
+                {
                 }
-            }.execute(bitmap);
-        } else {
-            //titleText.setText("Unable to load selected image.");
-        }
+                progress.dismiss();
+            }
+        }.start();
     }
 
     /** Loads a Bitmap from a content URI returned by the media picker. */
