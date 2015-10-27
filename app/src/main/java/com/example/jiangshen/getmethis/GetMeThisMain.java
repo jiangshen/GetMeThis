@@ -45,6 +45,9 @@ public class GetMeThisMain extends AppCompatActivity {
     private static final String TAG = GetMeThisMain.class.getSimpleName();
     private static final ArrayList<String> exclude = new ArrayList<String>(Arrays.asList(new String[]{
             "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten",
+            "isolated",
+            "horizontal", "vertical",
+            "simple",
             "nobody",
             "people",
             "adult",
@@ -53,7 +56,7 @@ public class GetMeThisMain extends AppCompatActivity {
             "background"})
     );
 
-    private ArrayList<String> masterTags = new ArrayList<>();
+
 
     // IMPORTANT NOTE: you should replace these keys with your own App ID and secret.
     // These can be obtained at https://developer.clarifai.com/applications
@@ -66,10 +69,15 @@ public class GetMeThisMain extends AppCompatActivity {
     private static final int CODE_PICK = 1;
     static final int REQUEST_IMAGE_CAPTURE = 1;
 
+    ArrayList<String> masterTags = new ArrayList<>();
+
     CardView cardView;
     ImageView imageView;
     TextView titleText;
+    TextView suggestText;
     Button buttonMap;
+
+    String displayedTag;
 
     FloatingActionButton fabImage;
     FloatingActionButton fabCamera;
@@ -88,6 +96,7 @@ public class GetMeThisMain extends AppCompatActivity {
         cardView = (CardView) findViewById(R.id.card_view);     //cardView set invisible from XML
         imageView = (ImageView) findViewById(R.id.image_view);
         titleText = (TextView) findViewById(R.id.title_text);
+        suggestText = (TextView) findViewById(R.id.suggest_text);
         buttonMap = (Button) findViewById(R.id.button_map);     //button set invisible from XML
 
         //setter and parser of callback functions
@@ -177,30 +186,25 @@ public class GetMeThisMain extends AppCompatActivity {
             //if source from media
             if (requestCode == CODE_PICK) {
                 // The user picked an image.
-                Log.d("GetMeThisMain", "User picked image: " + intent.getData());
                 bitmap = loadBitmapFromUri(intent.getData());
                 if (bitmap != null) {
                     imageView.setImageBitmap(analyzeForDisplay(bitmap));
-                    buttonMap.setVisibility(View.VISIBLE);
-                    cardView.setVisibility(View.VISIBLE);
-                    titleText.setVisibility(View.INVISIBLE);
-                } else {
-                    titleText.setText("Unable to load, try again!");
                 }
             } else if (requestCode == REQUEST_IMAGE_CAPTURE) {
                 //if source from camera
                 Bundle extras = intent.getExtras();
                 bitmap = (Bitmap) extras.get("data");
                 imageView.setImageBitmap(analyzeForDisplay(bitmap));
-
-                buttonMap.setVisibility(View.VISIBLE);
-                cardView.setVisibility(View.VISIBLE);
-                titleText.setVisibility(View.INVISIBLE);
             }
+            //after all the checks
             clarifaiAnalyze(bitmap);
+            titleText.setVisibility(View.INVISIBLE);
+            buttonMap.setVisibility(View.VISIBLE);
+            cardView.setVisibility(View.VISIBLE);
         }
     }
 
+    //Main request to clarifai to analyze image
     private void clarifaiAnalyze(final Bitmap bitmap) {
         final ProgressDialog progress = ProgressDialog.show(GetMeThisMain.this, "", "Analyzing image");
         new Thread()
@@ -212,13 +216,9 @@ public class GetMeThisMain extends AppCompatActivity {
                         @Override
                         public void run() {
                             progress.show();
-                            //clarifai send
+                            //Clarifai send
                             if (bitmap != null) {
                                 imageView.setImageBitmap(bitmap);
-                                //do the loading dialog
-                                //titleText.setText("Analyzing visuals...");
-                                buttonMap.setEnabled(false);
-
                                 // Run recognition on a background thread since it makes a network call.
                                 new AsyncTask<Bitmap, Void, RecognitionResult>() {
                                     @Override protected RecognitionResult doInBackground(Bitmap... bitmaps) {
@@ -228,16 +228,15 @@ public class GetMeThisMain extends AppCompatActivity {
                                         updateUIForResult(result);
                                     }
                                 }.execute(bitmap);
-                            } else {
-                                //titleText.setText("Unable to load selected image.");
                             }
                         }
                     });
+                    progress.dismiss();
                 }
                 catch(Exception e)
                 {
+                    Log.e(TAG, "Clarifai error", e);
                 }
-                progress.dismiss();
             }
         }.start();
     }
@@ -274,7 +273,7 @@ public class GetMeThisMain extends AppCompatActivity {
         return bmp;
     }
 
-    public static Bitmap RotateBitmap(Bitmap source, float angle)
+    private static Bitmap RotateBitmap(Bitmap source, float angle)
     {
         Matrix matrix = new Matrix();
         matrix.postRotate(angle);
@@ -282,7 +281,7 @@ public class GetMeThisMain extends AppCompatActivity {
                 matrix, true);
     }
 
-    public void sendToMap(View view, String str) {
+    private void sendToMap(View view, String str) {
         Intent intent = new Intent(this, MapsActivity.class);
         intent.putExtra(MAP_FOOD, str);
         startActivity(intent);
@@ -315,24 +314,20 @@ public class GetMeThisMain extends AppCompatActivity {
             if (result.getStatusCode() == RecognitionResult.StatusCode.OK) {
                 masterTags.clear();
                 // Display the list of tags in the UI.
-                //StringBuilder b = new StringBuilder();
                 for (Tag tag : result.getTags()) {
-                    //b.append(b.length() > 0 ? ", " : "").append(tag.getName() + "." + String.format("%.2f", tag.getProbability()));
                     if (tag.getProbability() >= 0.85 && !exclude.contains(tag.getName())) {
                         //add all entries into masterTags
                         masterTags.add(tag.getName());
                         //b.append(b.length() > 0 ? ", " : "").append(tag.getName());
                     }
                 }
-                //titleText.setText("Analysis Complete!");
+                //add the first tag into displayedTag
+                displayedTag = masterTags.get(0);
+                suggestText.setText("Tag: " + displayedTag);
             } else {
                 Log.e(TAG, "Clarifai: " + result.getStatusMessage());
-                //titleText.setText("Sorry, there was an error recognizing your image.");
             }
-        } else {
-            //titleText.setText("Sorry, there was an error recognizing your image.");
         }
-        buttonMap.setEnabled(true);
     }
 
     @Override
@@ -352,7 +347,7 @@ public class GetMeThisMain extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             AlertDialog alertDialog = new AlertDialog.Builder(this).create();
-            alertDialog.setTitle("About Get Me This");
+            alertDialog.setTitle("About");
             alertDialog.setMessage(String.format("Created at UGAHacks 2015\n\nWe hope our app will help you discover a new way of searching. Unleash your creativity, go out and take pictures! And see what surprises you can get :)"));
             alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
