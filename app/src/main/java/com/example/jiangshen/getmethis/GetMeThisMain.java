@@ -225,7 +225,6 @@ public class GetMeThisMain extends AppCompatActivity {
                                     protected RecognitionResult doInBackground(Bitmap... bitmaps) {
                                         return recognizeBitmap(bitmaps[0]);
                                     }
-
                                     @Override
                                     protected void onPostExecute(RecognitionResult result) {
                                         updateUIForResult(result);
