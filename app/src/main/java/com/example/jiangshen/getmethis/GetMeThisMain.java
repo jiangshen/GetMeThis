@@ -155,7 +155,7 @@ public class GetMeThisMain extends AppCompatActivity {
                     // showToast("Just an example description.");
                 }
             })
-            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            .setPositiveButton("Go to map", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int id) {
                     // user clicked OK, so save the mSelectedItems results somewhere
@@ -171,7 +171,7 @@ public class GetMeThisMain extends AppCompatActivity {
                     }
                 }
             })
-            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            .setNegativeButton("Back", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int id) {
                     // removes the AlertDialog in the screen
