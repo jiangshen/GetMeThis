@@ -96,7 +96,7 @@
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:layout_alignParentBottom="true"
-        android:background="@color/colorPrimary">
+        android:background="#607D8B">
 
         <TextView
             android:id="@+id/confidence_text"
