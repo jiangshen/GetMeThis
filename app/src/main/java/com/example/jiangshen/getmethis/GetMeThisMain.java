@@ -187,20 +187,15 @@ public class GetMeThisMain extends AppCompatActivity {
             if (requestCode == CODE_PICK) {
                 // The user picked an image.
                 bitmap = loadBitmapFromUri(intent.getData());
-                if (bitmap != null) {
-                    imageView.setImageBitmap(analyzeForDisplay(bitmap));
-                }
             } else if (requestCode == REQUEST_IMAGE_CAPTURE) {
                 //if source from camera
                 Bundle extras = intent.getExtras();
                 bitmap = (Bitmap) extras.get("data");
-                imageView.setImageBitmap(analyzeForDisplay(bitmap));
             }
             //after all the checks
+            //hides card from view before doing processing
+            cardView.setVisibility(View.INVISIBLE);
             clarifaiAnalyze(bitmap);
-            titleText.setVisibility(View.INVISIBLE);
-            buttonMap.setVisibility(View.VISIBLE);
-            cardView.setVisibility(View.VISIBLE);
         }
     }
 
@@ -228,6 +223,10 @@ public class GetMeThisMain extends AppCompatActivity {
                                     @Override
                                     protected void onPostExecute(RecognitionResult result) {
                                         updateUIForResult(result);
+                                        //method done display Card now
+                                        imageView.setImageBitmap(analyzeForDisplay(bitmap));
+                                        titleText.setVisibility(View.INVISIBLE);
+                                        cardView.setVisibility(View.VISIBLE);
                                         progress.dismiss();
                                     }
                                 }.execute(bitmap);

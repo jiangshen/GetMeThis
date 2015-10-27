@@ -88,8 +88,6 @@
                 android:textColor="#009688"
                 android:layout_below="@+id/image_view"
                 android:layout_alignParentRight="true"
-
-                android:visibility="invisible"
             />
 
         </RelativeLayout>
