@@ -75,8 +75,8 @@ public class GetMeThisMain extends AppCompatActivity {
     CardView cardView;
     ImageView imageView;
     TextView titleText;
-    TextView suggestText;
     TextView confidenceText;
+    Button buttonSingleTag;
     Button buttonMap;
 
     String displayedTag;
@@ -98,8 +98,8 @@ public class GetMeThisMain extends AppCompatActivity {
         cardView = (CardView) findViewById(R.id.card_view);     //cardView set invisible from XML
         imageView = (ImageView) findViewById(R.id.image_view);
         titleText = (TextView) findViewById(R.id.title_text);
-        suggestText = (TextView) findViewById(R.id.suggest_text);
         confidenceText = (TextView) findViewById(R.id.confidence_text);
+        buttonSingleTag = (Button) findViewById(R.id.button_single_tag);
         buttonMap = (Button) findViewById(R.id.button_map);     //button set invisible from XML
 
         //setter and parser of callback functions
@@ -122,6 +122,14 @@ public class GetMeThisMain extends AppCompatActivity {
                 if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
                     startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
                 }
+            }
+        });
+
+        //button actions
+        buttonSingleTag.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sendToMap(view, displayedTag);
             }
         });
 
@@ -331,8 +339,8 @@ public class GetMeThisMain extends AppCompatActivity {
                 }
                 //add the first tag into displayedTag
                 displayedTag = masterTags.get(0);
-                confidenceText.setText("Tag Confidence: " + String.format("%2.0f%s", masterProb.get(0) * 100, "%"));
-                suggestText.setText("Tag: " + displayedTag);
+                confidenceText.setText("Confidence: " + String.format("%2.0f%s", masterProb.get(0) * 100, "%"));
+                buttonSingleTag.setText(displayedTag);
             } else {
                 Log.e(TAG, "Clarifai: " + result.getStatusMessage());
             }

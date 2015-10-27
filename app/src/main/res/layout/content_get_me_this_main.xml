@@ -62,20 +62,19 @@
                 android:scaleType="centerCrop"
             />
 
-            <TextView
-                android:id="@+id/suggest_text"
-                android:text="Tag: "
-                android:textAllCaps="true"
-                android:textSize="14sp"
-                android:gravity="center"
-
+            <Button
+                style="?android:attr/borderlessButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="8dp"
+                android:text="None"
+                android:id="@+id/button_single_tag"
+                android:textColor="#009688"
                 android:layout_below="@+id/image_view"
-                android:layout_marginLeft="24dp"
-                android:layout_alignTop="@+id/button_map"
-                android:layout_alignBottom="@+id/button_map"
-            />
+                android:layout_alignParentLeft="true"
+                />
 
             <Button
                 style="?android:attr/borderlessButtonStyle"
