@@ -43,8 +43,8 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginBottom="100dp"
-        card_view:cardElevation = "2dp"
-        card_view:cardCornerRadius="2dp"
+        card_view:cardElevation = "3dp"
+        card_view:cardCornerRadius="3dp"
         android:stateListAnimator="@anim/liftup"
         android:visibility="invisible"
         android:focusable="false"
@@ -98,6 +98,19 @@
         android:layout_height="45dp"
         android:layout_alignParentBottom="true"
         android:background="@color/colorPrimary">
+
+        <TextView
+            android:id="@+id/confidence_text"
+            android:text="Confidence: "
+            android:textStyle="bold"
+            android:textSize="14sp"
+            android:gravity="center"
+            android:textColor="#fff"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:visibility="invisible"
+            />
+
     </LinearLayout>
 
 </RelativeLayout>

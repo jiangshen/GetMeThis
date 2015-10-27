@@ -70,11 +70,13 @@ public class GetMeThisMain extends AppCompatActivity {
     static final int REQUEST_IMAGE_CAPTURE = 1;
 
     ArrayList<String> masterTags = new ArrayList<>();
+    ArrayList<Double> masterProb = new ArrayList<>();
 
     CardView cardView;
     ImageView imageView;
     TextView titleText;
     TextView suggestText;
+    TextView confidenceText;
     Button buttonMap;
 
     String displayedTag;
@@ -97,6 +99,7 @@ public class GetMeThisMain extends AppCompatActivity {
         imageView = (ImageView) findViewById(R.id.image_view);
         titleText = (TextView) findViewById(R.id.title_text);
         suggestText = (TextView) findViewById(R.id.suggest_text);
+        confidenceText = (TextView) findViewById(R.id.confidence_text);
         buttonMap = (Button) findViewById(R.id.button_map);     //button set invisible from XML
 
         //setter and parser of callback functions
@@ -194,6 +197,7 @@ public class GetMeThisMain extends AppCompatActivity {
             }
             //after all the checks
             //hides card from view before doing processing
+            confidenceText.setVisibility(View.INVISIBLE);
             cardView.setVisibility(View.INVISIBLE);
             clarifaiAnalyze(bitmap);
         }
@@ -226,6 +230,7 @@ public class GetMeThisMain extends AppCompatActivity {
                                         //method done display Card now
                                         imageView.setImageBitmap(analyzeForDisplay(bitmap));
                                         titleText.setVisibility(View.INVISIBLE);
+                                        confidenceText.setVisibility(View.VISIBLE);
                                         cardView.setVisibility(View.VISIBLE);
                                         progress.dismiss();
                                     }
@@ -314,16 +319,19 @@ public class GetMeThisMain extends AppCompatActivity {
         if (result != null) {
             if (result.getStatusCode() == RecognitionResult.StatusCode.OK) {
                 masterTags.clear();
+                masterProb.clear();
                 // Display the list of tags in the UI.
                 for (Tag tag : result.getTags()) {
                     if (tag.getProbability() >= 0.85 && !exclude.contains(tag.getName())) {
-                        //add all entries into masterTags
+                        //add all entries into masterTags & masterProb
                         masterTags.add(tag.getName());
+                        masterProb.add(tag.getProbability());
                         //b.append(b.length() > 0 ? ", " : "").append(tag.getName());
                     }
                 }
                 //add the first tag into displayedTag
                 displayedTag = masterTags.get(0);
+                confidenceText.setText("Tag Confidence: " + String.format("%2.0f%s", masterProb.get(0) * 100, "%"));
                 suggestText.setText("Tag: " + displayedTag);
             } else {
                 Log.e(TAG, "Clarifai: " + result.getStatusMessage());
