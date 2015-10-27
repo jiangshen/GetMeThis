@@ -3,14 +3,18 @@ package com.example.jiangshen.getmethis;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Window;
@@ -46,10 +50,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private String foodName;
 
+    private static final int REQUEST_LOCATION = 1;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if ( ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ) {
+            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
+                    REQUEST_LOCATION);
+        }
 
         // Get the message from the intent
         Intent intent = getIntent();
@@ -67,6 +78,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         m_Location = getLocation();
         //new GetPlaces(this).execute();
         updateListView();
+
+        //get the RecyclerView
+        //RecyclerView rv = (RecyclerView)findViewById(R.id.rv);
 
         ListView lv = (ListView) findViewById(R.id.listView);
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -135,6 +149,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     public Location getLocation() {
+        if ( ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ) {
+            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
+                    REQUEST_LOCATION);
+        }
         m_LocationManager= (LocationManager) getSystemService(LOCATION_SERVICE);
         Criteria criteria = new Criteria();
         String bestProvider = m_LocationManager.getBestProvider(criteria, true);

@@ -31,7 +31,6 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:id="@+id/listView"
-            android:layout_below="@+id/Text"
             android:layout_centerHorizontal="true" />
     </LinearLayout>
 

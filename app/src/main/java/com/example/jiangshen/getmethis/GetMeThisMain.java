@@ -67,7 +67,7 @@ public class GetMeThisMain extends AppCompatActivity {
     public final static String MAP_FOOD = "com.example.jiangshen.feedmethis.MESSAGE";
 
     private static final int CODE_PICK = 1;
-    static final int REQUEST_IMAGE_CAPTURE = 1;
+    private static final int REQUEST_IMAGE_CAPTURE = 1;
 
     ArrayList<String> masterTags = new ArrayList<>();
     ArrayList<Double> masterProb = new ArrayList<>();
