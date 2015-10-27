@@ -221,17 +221,20 @@ public class GetMeThisMain extends AppCompatActivity {
                                 imageView.setImageBitmap(bitmap);
                                 // Run recognition on a background thread since it makes a network call.
                                 new AsyncTask<Bitmap, Void, RecognitionResult>() {
-                                    @Override protected RecognitionResult doInBackground(Bitmap... bitmaps) {
+                                    @Override
+                                    protected RecognitionResult doInBackground(Bitmap... bitmaps) {
                                         return recognizeBitmap(bitmaps[0]);
                                     }
-                                    @Override protected void onPostExecute(RecognitionResult result) {
+
+                                    @Override
+                                    protected void onPostExecute(RecognitionResult result) {
                                         updateUIForResult(result);
+                                        progress.dismiss();
                                     }
                                 }.execute(bitmap);
                             }
                         }
                     });
-                    progress.dismiss();
                 }
                 catch(Exception e)
                 {
