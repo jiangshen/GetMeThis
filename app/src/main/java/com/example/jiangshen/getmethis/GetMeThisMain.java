@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -64,6 +65,7 @@ public class GetMeThisMain extends AppCompatActivity {
     private static final int CODE_PICK = 1;
     static final int REQUEST_IMAGE_CAPTURE = 1;
 
+    CardView cardView;
     ImageView imageView;
     TextView titleText;
     Button buttonMap;
@@ -82,6 +84,7 @@ public class GetMeThisMain extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         //get the screen elements when loaded
+        cardView = (CardView) findViewById(R.id.card_view);     //cardView set invisible from XML
         imageView = (ImageView) findViewById(R.id.image_view);
         titleText = (TextView) findViewById(R.id.title_text);
         buttonMap = (Button) findViewById(R.id.button_map);     //button set invisible from XML
@@ -178,6 +181,8 @@ public class GetMeThisMain extends AppCompatActivity {
                 if (bitmap != null) {
                     imageView.setImageBitmap(analyzeForDisplay(bitmap));
                     buttonMap.setVisibility(View.VISIBLE);
+                    cardView.setVisibility(View.VISIBLE);
+                    titleText.setVisibility(View.INVISIBLE);
                 } else {
                     titleText.setText("Unable to load, try again!");
                 }
@@ -188,6 +193,8 @@ public class GetMeThisMain extends AppCompatActivity {
                 imageView.setImageBitmap(analyzeForDisplay(bitmap));
 
                 buttonMap.setVisibility(View.VISIBLE);
+                cardView.setVisibility(View.VISIBLE);
+                titleText.setVisibility(View.INVISIBLE);
             }
             clarifaiAnalyze(bitmap);
         }
@@ -197,7 +204,8 @@ public class GetMeThisMain extends AppCompatActivity {
         //clarifai send
         if (bitmap != null) {
             imageView.setImageBitmap(bitmap);
-            titleText.setText("Analyzing visuals...");
+            //do the loading dialog
+            //titleText.setText("Analyzing visuals...");
             buttonMap.setEnabled(false);
 
             // Run recognition on a background thread since it makes a network call.
@@ -210,7 +218,7 @@ public class GetMeThisMain extends AppCompatActivity {
                 }
             }.execute(bitmap);
         } else {
-            titleText.setText("Unable to load selected image.");
+            //titleText.setText("Unable to load selected image.");
         }
     }
 
@@ -296,13 +304,13 @@ public class GetMeThisMain extends AppCompatActivity {
                         //b.append(b.length() > 0 ? ", " : "").append(tag.getName());
                     }
                 }
-                titleText.setText("Analysis Complete!");
+                //titleText.setText("Analysis Complete!");
             } else {
                 Log.e(TAG, "Clarifai: " + result.getStatusMessage());
-                titleText.setText("Sorry, there was an error recognizing your image.");
+                //titleText.setText("Sorry, there was an error recognizing your image.");
             }
         } else {
-            titleText.setText("Sorry, there was an error recognizing your image.");
+            //titleText.setText("Sorry, there was an error recognizing your image.");
         }
         buttonMap.setEnabled(true);
     }
