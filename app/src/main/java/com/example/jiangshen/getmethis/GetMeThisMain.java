@@ -19,12 +19,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.clarifai.api.ClarifaiClient;
+import com.clarifai.api.RecognitionRequest;
+import com.clarifai.api.RecognitionResult;
+import com.clarifai.api.Tag;
+import com.clarifai.api.exception.ClarifaiException;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -32,12 +38,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import static android.provider.MediaStore.Images.Media;
-
-import com.clarifai.api.ClarifaiClient;
-import com.clarifai.api.RecognitionRequest;
-import com.clarifai.api.RecognitionResult;
-import com.clarifai.api.Tag;
-import com.clarifai.api.exception.ClarifaiException;
 
 public class GetMeThisMain extends AppCompatActivity {
 

@@ -3,10 +3,12 @@ package com.example.jiangshen.getmethis;
 /**
  * Created by Jesse on 10/24/2015.
  */
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 public class Place {
