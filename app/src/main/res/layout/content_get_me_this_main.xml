@@ -24,7 +24,7 @@
         android:textSize="30sp"
         android:textColor="#BDBDBD"
 
-        android:id="@+id/title_text"
+        android:id="@+id/instr_text"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="false"
@@ -32,74 +32,135 @@
         android:layout_alignParentBottom="false"
         android:gravity="center" />
 
-    <android.support.v7.widget.CardView
-        xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/card_view"
-        android:layout_gravity="center"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="100dp"
-        card_view:cardElevation = "3dp"
-        card_view:cardCornerRadius="3dp"
-        android:stateListAnimator="@anim/liftup"
-        android:visibility="invisible"
-        android:focusable="true"
-        android:focusableInTouchMode="true">
+        android:scrollbars="none"
+        android:layout_marginBottom="45dp">
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <ImageView
+            <android.support.v7.widget.CardView
+                xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/card_view"
+                android:layout_gravity="center"
                 android:layout_width="match_parent"
-                android:layout_height="330dp"
-                android:id="@+id/image_view"
-                android:layout_alignParentStart="true"
-                android:scaleType="centerCrop"
-            />
-
-            <Button
-                style="?android:attr/borderlessButtonStyle"
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
                 android:layout_marginLeft="8dp"
-                android:text="None"
-                android:id="@+id/button_single_tag"
-                android:textColor="#009688"
-                android:layout_below="@+id/image_view"
-                android:layout_alignParentLeft="true"
-                />
-
-            <Button
-                style="?android:attr/borderlessButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginRight="8dp"
                 android:layout_marginBottom="8dp"
-                android:text="More"
-                android:id="@+id/button_map"
-                android:textColor="#009688"
-                android:layout_below="@+id/image_view"
-                android:layout_alignParentRight="true"
-            />
+                card_view:cardElevation = "2dp"
+                card_view:cardCornerRadius="2dp"
+                android:stateListAnimator="@anim/raise"
+                android:visibility="invisible"
+                android:focusable="true"
+                android:focusableInTouchMode="true">
 
-        </RelativeLayout>
-    </android.support.v7.widget.CardView>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="330dp"
+                        android:id="@+id/image_view"
+                        android:layout_alignParentStart="true"
+                        android:scaleType="centerCrop" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="@+id/image_view"
+                        android:layout_alignBottom="@+id/image_view"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginBottom="16dp"
+                        android:paddingLeft="8dp"
+                        android:paddingRight="8dp"
+                        android:background="#54000000"
+                        android:textColor="#fff"
+                        android:textSize="25sp"
+                        android:text=""
+                        android:id="@+id/tag_text" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/image_view"
+                        android:textColor="#009688"
+                        android:id="@+id/more_text"
+                        android:textSize="18sp"
+                        android:layout_alignTop="@+id/expand_img"
+                        android:layout_alignParentLeft="true"
+                        android:paddingLeft="8dp"
+                        android:layout_margin="11dp"
+                        android:text="Show More:" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/image_view"
+                        android:textColor="#009688"
+                        android:id="@+id/less_text"
+                        android:textSize="18sp"
+                        android:layout_alignTop="@+id/expand_img"
+                        android:layout_alignParentLeft="true"
+                        android:paddingLeft="8dp"
+                        android:layout_margin="11dp"
+                        android:text="Looking for:"
+                        android:visibility="gone"/>
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/image_view"
+                        android:src="@drawable/ic_expand_more_black_48dp"
+                        android:tint="#009688"
+                        android:id="@+id/expand_img"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="8dp"
+                        android:onClick="toggleDetails"/>
+                    <LinearLayout
+                        android:layout_below="@+id/expand_img"
+                        android:id="@+id/tag_details"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+                        <TextView
+                            android:id="@+id/textViewInfo"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="16dp"
+                            android:text="@string/info"
+                            android:textColor="@android:color/black"
+                            android:textSize="16sp" />
+                        <Button
+                            style="?android:attr/borderlessButtonStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginBottom="8dp"
+                            android:text="Go To Map"
+                            android:id="@+id/button_map"
+                            android:textColor="#009688"
+                            android:layout_below="@+id/textViewInfo"
+                            android:layout_alignParentRight="true" />
+                    </LinearLayout>
+                </RelativeLayout>
+            </android.support.v7.widget.CardView>
+        </LinearLayout>
+    </ScrollView>
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <android.support.v7.widget.CardView
+        xmlns:bottom_bar="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:layout_alignParentBottom="true"
-        android:background="#607D8B">
-
+        android:id="@+id/bottom_bar"
+        bottom_bar:cardElevation = "4dp"
+        bottom_bar:cardBackgroundColor="#607D8B"
+        bottom_bar:cardCornerRadius="0dp">
         <TextView
             android:id="@+id/confidence_text"
-            android:text="Confidence: "
+            android:text=""
             android:textStyle="bold"
             android:textSize="14sp"
             android:gravity="center"
@@ -108,7 +169,6 @@
             android:layout_height="fill_parent"
             android:visibility="invisible"
             />
-
-    </LinearLayout>
+    </android.support.v7.widget.CardView>
 
 </RelativeLayout>

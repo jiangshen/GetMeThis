@@ -22,6 +22,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.RotateAnimation;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -56,7 +59,8 @@ public class GetMeThisMain extends AppCompatActivity {
             "background"})
     );
 
-
+    //dropdown animation duration
+    private static final int DURATION = 250;
 
     // IMPORTANT NOTE: you should replace these keys with your own App ID and secret.
     // These can be obtained at https://developer.clarifai.com/applications
@@ -71,18 +75,25 @@ public class GetMeThisMain extends AppCompatActivity {
 
     ArrayList<String> masterTags = new ArrayList<>();
     ArrayList<Double> masterProb = new ArrayList<>();
+    String displayedTag;
 
     CardView cardView;
     ImageView imageView;
-    TextView titleText;
-    TextView confidenceText;
-    Button buttonSingleTag;
-    Button buttonMap;
+    TextView tagText;
 
-    String displayedTag;
+    TextView moreText;
+    TextView lessText;
+    ImageView expandImg;
+
+    ViewGroup tagDetails;
+    Button buttonMap;
 
     FloatingActionButton fabImage;
     FloatingActionButton fabCamera;
+    TextView confidenceText;
+
+    //backgound text
+    TextView instrText;
 
     @Override
     //init all methods here
@@ -97,9 +108,13 @@ public class GetMeThisMain extends AppCompatActivity {
         //get the screen elements when loaded
         cardView = (CardView) findViewById(R.id.card_view);     //cardView set invisible from XML
         imageView = (ImageView) findViewById(R.id.image_view);
-        titleText = (TextView) findViewById(R.id.title_text);
+        expandImg = (ImageView) findViewById(R.id.expand_img);
+        moreText = (TextView) findViewById(R.id.more_text);
+        lessText = (TextView) findViewById(R.id.less_text);
+        instrText = (TextView) findViewById(R.id.instr_text);
+        tagText = (TextView) findViewById(R.id.tag_text);
+        tagDetails = (ViewGroup) findViewById(R.id.tag_details);
         confidenceText = (TextView) findViewById(R.id.confidence_text);
-        buttonSingleTag = (Button) findViewById(R.id.button_single_tag);
         buttonMap = (Button) findViewById(R.id.button_map);     //button set invisible from XML
 
         //setter and parser of callback functions
@@ -126,13 +141,6 @@ public class GetMeThisMain extends AppCompatActivity {
         });
 
         //button actions
-        buttonSingleTag.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                sendToMap(view, displayedTag);
-            }
-        });
-
         buttonMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -175,7 +183,7 @@ public class GetMeThisMain extends AppCompatActivity {
                         }
                         //send the final info to maps
                         sendToMap(((Dialog) dialog).getCurrentFocus(), selectedTokens.substring(0, selectedTokens.length() - 2));
-                        //titleText.setText(selectedTokens.substring(0, selectedTokens.length() - 2));
+                        //instrText.setText(selectedTokens.substring(0, selectedTokens.length() - 2));
                     }
                 }
             })
@@ -237,7 +245,7 @@ public class GetMeThisMain extends AppCompatActivity {
                                         updateUIForResult(result);
                                         //method done display Card now
                                         imageView.setImageBitmap(analyzeForDisplay(bitmap));
-                                        titleText.setVisibility(View.INVISIBLE);
+                                        instrText.setVisibility(View.INVISIBLE);
                                         confidenceText.setVisibility(View.VISIBLE);
                                         cardView.setVisibility(View.VISIBLE);
                                         progress.dismiss();
@@ -340,7 +348,7 @@ public class GetMeThisMain extends AppCompatActivity {
                 //add the first tag into displayedTag
                 displayedTag = masterTags.get(0);
                 confidenceText.setText("Confidence: " + String.format("%2.0f%s", masterProb.get(0) * 100, "%"));
-                buttonSingleTag.setText(displayedTag);
+                tagText.setText(firstLetterCap(displayedTag));
             } else {
                 Log.e(TAG, "Clarifai: " + result.getStatusMessage());
             }
@@ -374,5 +382,33 @@ public class GetMeThisMain extends AppCompatActivity {
             alertDialog.show();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public String firstLetterCap(String str) {
+        return str.substring(0,1).toUpperCase() + str.substring(1);
+    }
+
+    public void toggleDetails(View view) {
+        if (tagDetails.getVisibility() == View.GONE) {
+            ExpandAndCollapseViewUtil.expand(tagDetails, DURATION);
+            expandImg.setImageResource(R.drawable.ic_expand_more_black_48dp);
+            rotate(-180.0f);
+            moreText.setVisibility(View.GONE);
+            lessText.setVisibility(View.VISIBLE);
+        } else {
+            ExpandAndCollapseViewUtil.collapse(tagDetails, DURATION);
+            expandImg.setImageResource(R.drawable.ic_expand_less_black_48dp);
+            rotate(180.0f);
+            lessText.setVisibility(View.GONE);
+            moreText.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void rotate(float angle) {
+        Animation animation = new RotateAnimation(0.0f, angle, Animation.RELATIVE_TO_SELF, 0.5f,
+                Animation.RELATIVE_TO_SELF, 0.5f);
+        animation.setFillAfter(true);
+        animation.setDuration(DURATION);
+        expandImg.startAnimation(animation);
     }
 }
