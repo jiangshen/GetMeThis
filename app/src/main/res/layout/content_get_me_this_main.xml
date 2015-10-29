@@ -36,11 +36,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:scrollbars="none"
-        android:layout_marginBottom="45dp">
+        android:layout_marginBottom="45dp"
+        android:id="@+id/scroll_view" >
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content" >
 
             <android.support.v7.widget.CardView
                 xmlns:card_view="http://schemas.android.com/apk/res-auto"
@@ -48,12 +49,12 @@
                 android:layout_gravity="center"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
-                android:layout_marginBottom="8dp"
-                card_view:cardElevation = "2dp"
-                card_view:cardCornerRadius="2dp"
+                android:layout_marginBottom="32dp"
+                card_view:cardElevation = "3dp"
+                card_view:cardCornerRadius="3dp"
                 android:stateListAnimator="@anim/raise"
                 android:visibility="invisible"
                 android:focusable="true"
@@ -68,57 +69,35 @@
                         android:id="@+id/image_view"
                         android:layout_alignParentStart="true"
                         android:scaleType="centerCrop" />
-                    <TextView
-                        android:layout_width="wrap_content"
+                    <RelativeLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentStart="@+id/image_view"
                         android:layout_alignBottom="@+id/image_view"
-                        android:layout_marginLeft="16dp"
-                        android:layout_marginBottom="16dp"
-                        android:paddingLeft="8dp"
-                        android:paddingRight="8dp"
-                        android:background="#54000000"
-                        android:textColor="#fff"
-                        android:textSize="25sp"
-                        android:text=""
-                        android:id="@+id/tag_text" />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/image_view"
-                        android:textColor="#009688"
-                        android:id="@+id/more_text"
-                        android:textSize="18sp"
-                        android:layout_alignTop="@+id/expand_img"
-                        android:layout_alignParentLeft="true"
-                        android:paddingLeft="8dp"
-                        android:layout_margin="11dp"
-                        android:text="Show More:" />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/image_view"
-                        android:textColor="#009688"
-                        android:id="@+id/less_text"
-                        android:textSize="18sp"
-                        android:layout_alignTop="@+id/expand_img"
-                        android:layout_alignParentLeft="true"
-                        android:paddingLeft="8dp"
-                        android:layout_margin="11dp"
-                        android:text="Looking for:"
-                        android:visibility="gone"/>
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/image_view"
-                        android:src="@drawable/ic_expand_more_black_48dp"
-                        android:tint="#009688"
-                        android:id="@+id/expand_img"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginRight="8dp"
-                        android:onClick="toggleDetails"/>
-                    <LinearLayout
-                        android:layout_below="@+id/expand_img"
+                        android:id="@+id/img_view_bottom_bar"
+                        android:background="#54000000">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:layout_margin="8dp"
+                            android:paddingLeft="8dp"
+                            android:textColor="#ffffff"
+                            android:textSize="25sp"
+                            android:text=""
+                            android:id="@+id/tag_text" />
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:src="@drawable/ic_expand_more_black_48dp"
+                            android:tint="#ffffff"
+                            android:id="@+id/expand_img"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginRight="8dp"
+                            android:onClick="toggleDetails"/>
+                    </RelativeLayout>
+                    <RelativeLayout
+                        android:layout_below="@+id/img_view_bottom_bar"
                         android:id="@+id/tag_details"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -136,14 +115,13 @@
                             style="?android:attr/borderlessButtonStyle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            android:layout_marginBottom="8dp"
+                            android:layout_marginRight="8dp"
                             android:text="Go To Map"
                             android:id="@+id/button_map"
                             android:textColor="#009688"
                             android:layout_below="@+id/textViewInfo"
-                            android:layout_alignParentRight="true" />
-                    </LinearLayout>
+                            android:layout_alignParentEnd="true" />
+                    </RelativeLayout>
                 </RelativeLayout>
             </android.support.v7.widget.CardView>
         </LinearLayout>

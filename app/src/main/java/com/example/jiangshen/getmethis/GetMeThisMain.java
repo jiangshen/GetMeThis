@@ -27,6 +27,7 @@ import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.clarifai.api.ClarifaiClient;
@@ -60,7 +61,7 @@ public class GetMeThisMain extends AppCompatActivity {
     );
 
     //dropdown animation duration
-    private static final int DURATION = 250;
+    private static final int DURATION = 300;
 
     // IMPORTANT NOTE: you should replace these keys with your own App ID and secret.
     // These can be obtained at https://developer.clarifai.com/applications
@@ -77,12 +78,11 @@ public class GetMeThisMain extends AppCompatActivity {
     ArrayList<Double> masterProb = new ArrayList<>();
     String displayedTag;
 
+    ScrollView scrollView;
     CardView cardView;
     ImageView imageView;
     TextView tagText;
 
-    TextView moreText;
-    TextView lessText;
     ImageView expandImg;
 
     ViewGroup tagDetails;
@@ -106,11 +106,10 @@ public class GetMeThisMain extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         //get the screen elements when loaded
+        scrollView = (ScrollView) findViewById(R.id.scroll_view);
         cardView = (CardView) findViewById(R.id.card_view);     //cardView set invisible from XML
         imageView = (ImageView) findViewById(R.id.image_view);
         expandImg = (ImageView) findViewById(R.id.expand_img);
-        moreText = (TextView) findViewById(R.id.more_text);
-        lessText = (TextView) findViewById(R.id.less_text);
         instrText = (TextView) findViewById(R.id.instr_text);
         tagText = (TextView) findViewById(R.id.tag_text);
         tagDetails = (ViewGroup) findViewById(R.id.tag_details);
@@ -393,14 +392,10 @@ public class GetMeThisMain extends AppCompatActivity {
             ExpandAndCollapseViewUtil.expand(tagDetails, DURATION);
             expandImg.setImageResource(R.drawable.ic_expand_more_black_48dp);
             rotate(-180.0f);
-            moreText.setVisibility(View.GONE);
-            lessText.setVisibility(View.VISIBLE);
         } else {
             ExpandAndCollapseViewUtil.collapse(tagDetails, DURATION);
             expandImg.setImageResource(R.drawable.ic_expand_less_black_48dp);
             rotate(180.0f);
-            lessText.setVisibility(View.GONE);
-            moreText.setVisibility(View.VISIBLE);
         }
     }
 
