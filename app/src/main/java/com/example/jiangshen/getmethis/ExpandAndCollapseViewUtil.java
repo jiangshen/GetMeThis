@@ -70,7 +70,6 @@ public class ExpandAndCollapseViewUtil {
                 return true;
             }
         };
-
         a.setDuration(duration);
         v.startAnimation(a);
     }

@@ -23,6 +23,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.widget.Button;
@@ -95,6 +96,9 @@ public class GetMeThisMain extends AppCompatActivity {
     //backgound text
     TextView instrText;
 
+    //keeps track of scrollView status
+    boolean hasScrolledDown;
+
     @Override
     //init all methods here
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,6 +119,20 @@ public class GetMeThisMain extends AppCompatActivity {
         tagDetails = (ViewGroup) findViewById(R.id.tag_details);
         confidenceText = (TextView) findViewById(R.id.confidence_text);
         buttonMap = (Button) findViewById(R.id.button_map);     //button set invisible from XML
+
+        //init to be false
+        hasScrolledDown = false;
+
+        //Set scrollView to listen to layout changes
+        ViewTreeObserver vto = scrollView.getViewTreeObserver();
+        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            public void onGlobalLayout() {
+                //scroll only if still on top (haven't scroll down yet or went back to top)
+                if(!hasScrolledDown) {
+                    scrollView.smoothScrollTo(0, scrollView.getBottom());
+                }
+            }
+        });
 
         //setter and parser of callback functions
         fabImage = (FloatingActionButton) findViewById(R.id.fab_img);
@@ -392,10 +410,12 @@ public class GetMeThisMain extends AppCompatActivity {
             ExpandAndCollapseViewUtil.expand(tagDetails, DURATION);
             expandImg.setImageResource(R.drawable.ic_expand_more_black_48dp);
             rotate(-180.0f);
+            hasScrolledDown = false;
         } else {
             ExpandAndCollapseViewUtil.collapse(tagDetails, DURATION);
             expandImg.setImageResource(R.drawable.ic_expand_less_black_48dp);
             rotate(180.0f);
+            hasScrolledDown = true;
         }
     }
 
