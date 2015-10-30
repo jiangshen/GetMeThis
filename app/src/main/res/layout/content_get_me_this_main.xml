@@ -113,7 +113,7 @@
                             style="?android:attr/borderlessButtonStyle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginEnd="8dp"
+                            android:layout_margin="8dp"
                             android:text="@string/button_map_text"
                             android:id="@+id/button_map"
                             android:textColor="@color/colorControls"
