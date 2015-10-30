@@ -48,7 +48,7 @@ public class GetMeThisMain extends AppCompatActivity {
 
     //clarifai vars
     private static final String TAG = GetMeThisMain.class.getSimpleName();
-    private static final ArrayList<String> exclude = new ArrayList<String>(Arrays.asList(new String[]{
+    private static final ArrayList<String> exclude = new ArrayList<>(Arrays.asList(new String[]{
             "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten",
             "isolated",
             "horizontal", "vertical",
@@ -169,7 +169,7 @@ public class GetMeThisMain extends AppCompatActivity {
     private void showCheckBoxDialog(final CharSequence[] tagData) {
         // where we will store or remove selected items
         final ArrayList<Integer> selectedItemsIndexList;
-        selectedItemsIndexList = new ArrayList<Integer>();
+        selectedItemsIndexList = new ArrayList<>();
 
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Are you looking for?")

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">给我这</string>
+    <string name="action_about">关于</string>
+    <string name="button_map_text">去地图</string>
+    <string name="instructions">请选择或拍张图片</string>
+    <string name="title_activity_maps">地图</string>
+</resources>
