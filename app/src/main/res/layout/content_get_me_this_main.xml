@@ -102,13 +102,20 @@
                         android:orientation="vertical"
                         android:visibility="gone">
                         <TextView
-                            android:id="@+id/textViewInfo"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:text="Are you looking for?"
                             android:layout_margin="16dp"
-                            android:text="@string/info"
-                            android:textColor="@android:color/black"
-                            android:textSize="16sp" />
+                            android:textSize="25sp"
+                            android:id="@+id/more_opt_title"/>
+                        <LinearLayout
+                            android:layout_below="@+id/more_opt_title"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="16dp"
+                            android:id="@+id/checkbox_container"
+                            android:orientation="vertical">
+                        </LinearLayout>
                         <Button
                             style="?android:attr/borderlessButtonStyle"
                             android:layout_width="wrap_content"
@@ -117,7 +124,7 @@
                             android:text="@string/button_map_text"
                             android:id="@+id/button_map"
                             android:textColor="@color/colorControls"
-                            android:layout_below="@+id/textViewInfo"
+                            android:layout_below="@+id/checkbox_container"
                             android:layout_alignParentEnd="true" />
                     </RelativeLayout>
                 </RelativeLayout>

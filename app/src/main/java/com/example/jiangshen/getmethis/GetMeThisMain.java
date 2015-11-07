@@ -28,8 +28,10 @@ import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.CheckBox;
 
 import com.clarifai.api.ClarifaiClient;
 import com.clarifai.api.RecognitionRequest;
@@ -87,6 +89,8 @@ public class GetMeThisMain extends AppCompatActivity {
     ImageView expandImg;
 
     ViewGroup tagDetails;
+    LinearLayout checkboxContainer;
+    CheckBox checkBox;
     Button buttonMap;
 
     FloatingActionButton fabImage;
@@ -117,6 +121,7 @@ public class GetMeThisMain extends AppCompatActivity {
         instrText = (TextView) findViewById(R.id.instr_text);
         tagText = (TextView) findViewById(R.id.tag_text);
         tagDetails = (ViewGroup) findViewById(R.id.tag_details);
+        checkboxContainer = (LinearLayout) findViewById(R.id.checkbox_container);
         confidenceText = (TextView) findViewById(R.id.confidence_text);
         buttonMap = (Button) findViewById(R.id.button_map);     //button set invisible from XML
 
@@ -265,6 +270,7 @@ public class GetMeThisMain extends AppCompatActivity {
                                         instrText.setVisibility(View.INVISIBLE);
                                         confidenceText.setVisibility(View.VISIBLE);
                                         cardView.setVisibility(View.VISIBLE);
+                                        populateCheckBoxContainer();
                                         progress.dismiss();
                                     }
                                 }.execute(bitmap);
@@ -278,6 +284,21 @@ public class GetMeThisMain extends AppCompatActivity {
                 }
             }
         }.start();
+    }
+
+    private void populateCheckBoxContainer() {
+        checkboxContainer.removeAllViews();
+        //redraw the parent view
+        tagDetails.invalidate();
+        int maxList = masterTags.size() < 11 ? masterTags.size() : 10;
+        for (int i = 0; i < maxList; i++) {
+            checkBox = new CheckBox(this);
+            checkBox.setTextSize(18);
+            checkBox.setId(i);
+            checkBox.setPadding(0,0,0,8);
+            checkBox.setText(masterTags.get(i));
+            checkboxContainer.addView(checkBox);
+        }
     }
 
     /** Loads a Bitmap from a content URI returned by the media picker. */
