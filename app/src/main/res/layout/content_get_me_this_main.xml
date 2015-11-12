@@ -123,7 +123,7 @@
                             android:layout_margin="8dp"
                             android:text="@string/button_map_text"
                             android:id="@+id/button_map"
-                            android:textColor="@color/colorControls"
+                            android:textColor="@color/colorAccent"
                             android:layout_below="@+id/checkbox_container"
                             android:layout_alignParentEnd="true" />
                     </RelativeLayout>

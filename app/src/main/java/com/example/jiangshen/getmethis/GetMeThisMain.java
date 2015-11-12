@@ -141,6 +141,7 @@ public class GetMeThisMain extends AppCompatActivity {
 
         //setter and parser of callback functions
         fabImage = (FloatingActionButton) findViewById(R.id.fab_img);
+        fabImage.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FF5722")));
         fabImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
