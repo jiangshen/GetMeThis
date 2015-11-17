@@ -2,3 +2,5 @@
 Next generation image recognition app that searches for what you want based on your photos!
 
 ![Main App](/assets/Main.png?raw=true)
+![With photos loaded](/assets/MainwithPhoto.png?raw=true)
+![Map](/assets/Map.png?raw=true)
