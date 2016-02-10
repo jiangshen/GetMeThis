@@ -68,8 +68,8 @@ public class GetMeThisMain extends AppCompatActivity {
 
     // IMPORTANT NOTE: you should replace these keys with your own App ID and secret.
     // These can be obtained at https://developer.clarifai.com/applications
-    private static final String APP_ID = "vM05qo55uhZard2dL4BixmMm4WsHIl6CsGCTgS_7";
-    private static final String APP_SECRET = "rx4oPPiXiCWNRVcoJ0huLz02cKiQUZtq5JPVrhjM";
+    private static final String APP_ID = "q4rC90O0Ylhffbq84AJh4xpVHkRAVIxLPXQpSLQ3";
+    private static final String APP_SECRET = "qbSCDZ0dnenRQDBAzzhl9fJ4NK7edV3LAtOyhiKb";
     private final ClarifaiClient client = new ClarifaiClient(APP_ID, APP_SECRET);
 
     public final static String MAP_FOOD = "com.example.jiangshen.feedmethis.MESSAGE";
@@ -412,7 +412,7 @@ public class GetMeThisMain extends AppCompatActivity {
         if (id == R.id.action_settings) {
             AlertDialog alertDialog = new AlertDialog.Builder(this).create();
             alertDialog.setTitle("About");
-            alertDialog.setMessage(String.format("Created at UGAHacks 2015\n\nWe hope our app will help you discover a new way of searching. Unleash your creativity, go out and take pictures! And see what surprises you can get :)"));
+            alertDialog.setMessage("Created at UGAHacks 2015\n\nWe hope our app will help you discover a new way of searching. Unleash your creativity, go out and take pictures! And see what surprises you can get :)");
             alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                    dialog.cancel();
