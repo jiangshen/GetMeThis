@@ -7,11 +7,12 @@ Next generation image recognition app that searches for what you want based on y
 ## Walkthrough
 
 1. Main interface
-![Main App](/screenshots/1.png?raw=true =600x337) 
 <img src="/screenshots/1.png" width="337" height="600">
-2. aaa
-
-
-![With photos loaded](/assets/MainWithPhoto.png?raw=true)
-![More options](/assets/MainWithPhotoOptions.png?raw=true)
-![Map](/assets/Map.png?raw=true)
+2. Select a picture or take a photo
+<img src="/screenshots/2.png" width="337" height="600">
+3. Recognize the contents of the photo
+<img src="/screenshots/3.png" width="337" height="600">
+4. Go to maps
+<img src="/screenshots/4.png" width="337" height="600">
+5. Get your items!
+<img src="/screenshots/5.png" width="337" height="600">
