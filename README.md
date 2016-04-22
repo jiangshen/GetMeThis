@@ -7,7 +7,7 @@ Next generation image recognition app that searches for what you want based on y
 ## Walkthrough
 
 1. Main interface
-![Main App](/screenshots/1.png =600x337) 
+![Main App](/screenshots/1.png?raw=true =600x337) 
 2. aaa
 
 
