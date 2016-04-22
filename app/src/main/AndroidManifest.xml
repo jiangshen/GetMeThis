@@ -59,13 +59,11 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <!--lg phones cant use apptheme.appbaroverlay-->
-
         <activity
             android:name="com.example.jiangshen.getmethis.MapsActivity"
             android:label="Get Directions"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" >
+            android:theme="@style/AppTheme.Maps" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.jiangshen.getmethis.GetMeThisMain" />
