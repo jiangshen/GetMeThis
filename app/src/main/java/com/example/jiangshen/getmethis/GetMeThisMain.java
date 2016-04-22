@@ -60,7 +60,8 @@ public class GetMeThisMain extends AppCompatActivity {
             "adult",
             "empty",
             "blank",
-            "background"})
+            "background",
+            "no person"})
     );
 
     //dropdown animation duration
