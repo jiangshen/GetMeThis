@@ -4,8 +4,13 @@
 
 Next generation image recognition app that searches for what you want based on your photos!
 
+## Walkthrough
 
-![Main App](/assets/Main.png?raw=true)
+1. Main interface
+![Main App](/screenshots/1.png =600x337) 
+2. aaa
+
+
 ![With photos loaded](/assets/MainWithPhoto.png?raw=true)
 ![More options](/assets/MainWithPhotoOptions.png?raw=true)
 ![Map](/assets/Map.png?raw=true)
