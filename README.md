@@ -2,6 +2,8 @@
 
 > Created at UGAHacks
 
+<img src="/assets/GetMeThis.png" width="150" height="150">
+
 Next generation image recognition app that searches for what you want based on your photos!
 
 ## Walkthrough
